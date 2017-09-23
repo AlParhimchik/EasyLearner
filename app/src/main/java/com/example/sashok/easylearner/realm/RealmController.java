@@ -44,9 +44,8 @@ public class RealmController  {
     }
 
     public static RealmController with(Fragment fragment){
-        if (instance == null) {
             instance = new RealmController(fragment.getActivity().getApplication());
-        }
+
         return instance;
 
     }
