@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">EasyLearner</string>
+    <string name="fav_folder">Избранные</string>
 </resources>

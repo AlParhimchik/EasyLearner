@@ -24,7 +24,7 @@ public class RealmController  {
     private static RealmController instance;
     private final Realm realm;
 
-    public  RealmController(Application application){
+    private   RealmController(Application application){
         realm=Realm.getDefaultInstance();
     }
 
@@ -59,7 +59,6 @@ public class RealmController  {
 
         return realm;
     }
-
     public void refresh() {
 
         realm.refresh();
@@ -94,7 +93,7 @@ public class RealmController  {
         });
     }
 
-    public List<Word> getWordsinFolder(final Folder folder){
+    public ArrayList<Word> getWordsinFolder(final Folder folder){
         final ArrayList<Word> words=new ArrayList<>();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -107,6 +106,20 @@ public class RealmController  {
         });
         return  words;
     }
+    public ArrayList<Word> getWords(){
+        final ArrayList<Word> link=new ArrayList<>();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<Word>  words=realm.where(Word.class).findAll();
+                for (Word word:words){
+                    link.add(word);
+                }
+            }
+        });
+        return  link;
+    }
+
     public void addFolder(final  Folder folder){
         realm.executeTransaction(new Realm.Transaction() {
             @Override
