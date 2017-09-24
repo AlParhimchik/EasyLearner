@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
             CURRENT_TAG = TAG_SHOW_CARD;
             loadFragment();
         }
+
     }
 
     public void loadFragment() {
@@ -172,28 +173,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-//    public void setFragment(int item_id) {
-//        Fragment fragment;
-//        switch (item_id) {
-//            case R.id.add_folder:
-//                fragment = new AddFolderFragment();
-//                break;
-//            case R.id.net_search:
-//                fragment = new SearchInNetFragment();
-//                break;
-//        }
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-//                android.R.anim.fade_out);
-//        fragmentTransaction.replace(R.id.frame, fragment, CURRENT_TAG);
-//    }
-
     public void setupToolBar() {
 
         setSupportActionBar(toolbar);
     }
 
-    public void show_words(View view) {
+    public void show_words() {
         ArrayList<Word> words = RealmController.getInstance().getWords();
         Log.d("TAG", words.get(0).getEnWord());
     }
@@ -223,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
                         word.setTranslation(strings);
                         RealmController controller = RealmController.with(MainActivity.this);
                         controller.addWord(word);
+                        show_words();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -234,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
                 });
         AlertDialog dialog = builder.create();
         dialog.show();
+
     }
 
     public void addMostFavFoldersToNav() {

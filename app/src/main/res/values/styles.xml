@@ -24,4 +24,10 @@
         <item name="cardPreventCornerOverlap">false</item>
         <item name="cardBackgroundColor">@android:color/white</item>
     </style>
+
+    <style name="SwipeFling">
+        <item name="rotation_degrees">15</item>
+        <item name="min_adapter_stack">1</item>
+        <item name="max_visible">1</item>
+    </style>
 </resources>

@@ -1,5 +1,9 @@
 package com.example.sashok.easylearner.model;
 
+import android.support.annotation.RawRes;
+import android.support.v7.widget.CardView;
+import android.widget.TextView;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,6 +12,7 @@ import java.util.List;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
 
 /**
@@ -21,7 +26,10 @@ public class Word extends RealmObject {
     private Folder folderName;
     private Date date;
     private int countOfShow = 1;
-
+    @Ignore
+    public CardView cardView;
+    @Ignore
+    public TextView textView;
     public int getID() {
         return ID;
     }
