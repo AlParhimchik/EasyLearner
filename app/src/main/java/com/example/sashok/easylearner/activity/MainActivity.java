@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.example.sashok.easylearner.R;
 import com.example.sashok.easylearner.fragment.AddFolderFragment;
+import com.example.sashok.easylearner.fragment.ListFolderFragment;
 import com.example.sashok.easylearner.fragment.SearchInNetFragment;
 import com.example.sashok.easylearner.fragment.ShowCardWithWords;
 import com.example.sashok.easylearner.listener.FolderAddedListener;
@@ -42,6 +43,7 @@ import io.realm.RealmList;
 
 public class MainActivity extends AppCompatActivity implements FolderAddedListener {
     // tags used to attach the fragments
+    private static final String TAG_LIST_FOLDER = "folder_list";
     private static final String TAG_SHOW_CARD = "show_cards";
     private static final String TAG_ADD_FOLDER = "addFolder";
     private static final String TAG_SEARCH_INTERNER = "searchInternet";
@@ -107,16 +109,20 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
     private Fragment getFragment() {
         switch (navItemIndex) {
             case 0:
+                ListFolderFragment listFolderFragment=new ListFolderFragment();
+                toolBarTitle.setText(R.string.app_name);
+                return listFolderFragment;
+            case 1:
 
                 ShowCardWithWords cardFragment = new ShowCardWithWords();
                 toolBarTitle.setText(R.string.app_name);
                 return cardFragment;
-            case 1:
+            case 2:
 
                 AddFolderFragment addFolderFragment = new AddFolderFragment();
                 toolBarTitle.setText(R.string.AddFolder);
                 return addFolderFragment;
-            case 2:
+            case 3:
                 SearchInNetFragment searchFragment = new SearchInNetFragment();
                 toolBarTitle.setText(R.string.search_in_net);
                 return searchFragment;
@@ -160,15 +166,15 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
                 switch (item.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.add_folder:
-                        navItemIndex = 1;
+                        navItemIndex = 2;
                         CURRENT_TAG = TAG_ADD_FOLDER;
                         break;
                     case R.id.net_search:
-                        navItemIndex = 2;
+                        navItemIndex = 3;
                         CURRENT_TAG = TAG_SEARCH_INTERNER;
                         break;
                     case R.id.unsorted_item:
-                        navItemIndex = 0;
+                        navItemIndex = 1;
                         CURRENT_TAG = TAG_SHOW_CARD;
                         Folder unsorted_folder=new Folder();
                         unsorted_folder.setName(getResources().getString(R.string.unsorted_item_string));
@@ -176,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
                         startFragmentWithFolder(item,unsorted_folder);
                         break;
                     case R.id.favourite_item:
-                        navItemIndex = 0;
+                        navItemIndex = 1;
                         CURRENT_TAG = TAG_SHOW_CARD;
                         Folder fav_folder=new Folder();
                         fav_folder.setName(getResources().getString(R.string.favourite_item_string));
@@ -185,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
                         break;
                     default:
                         folder=RealmController.with(MainActivity.this).getFolderById(item.getItemId());
-                        navItemIndex = 0;
+                        navItemIndex = 1;
                         CURRENT_TAG = TAG_SHOW_CARD;
                         if (folder!=null) {
                             startFragmentWithFolder(item,folder);
@@ -232,12 +238,7 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         setSupportActionBar(toolbar);
     }
 
-    public void show_words() {
-        ArrayList<Word> words = RealmController.getInstance().getWords();
-        Log.d("TAG", words.get(0).getEnWord());
-    }
-
-    public void showADdWordDialog() {
+      public void showADdWordDialog() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -262,7 +263,6 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
                         word.setTranslation(strings);
                         RealmController controller = RealmController.with(MainActivity.this);
                         controller.addWord(word);
-                        show_words();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -321,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         }
         if (navItemIndex != 0) {
             navItemIndex = 0;
-            CURRENT_TAG = TAG_SHOW_CARD;
+            CURRENT_TAG = TAG_LIST_FOLDER;
             loadFragment();
             return;
         } else {
@@ -361,7 +361,7 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
     @Override
     public void onFolderAddedListener(Fragment fragment) {
         navItemIndex = 0;
-        CURRENT_TAG = TAG_SHOW_CARD;
+        CURRENT_TAG = TAG_LIST_FOLDER;
         toggleFab();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,

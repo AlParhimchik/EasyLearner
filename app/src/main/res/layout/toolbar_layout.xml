@@ -16,6 +16,7 @@
         android:id="@+id/toolbar_title"
         android:gravity="left|center"
         android:layout_gravity="center"
+        app:layout_scrollFlags="scroll|enterAlways"
         android:textSize="18sp"
         />
 </android.support.v7.widget.Toolbar>
