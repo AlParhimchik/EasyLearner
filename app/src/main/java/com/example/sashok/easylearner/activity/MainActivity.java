@@ -46,6 +46,11 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
     private static final String TAG_ADD_FOLDER = "addFolder";
     private static final String TAG_SEARCH_INTERNER = "searchInternet";
     public static String CURRENT_TAG = TAG_SHOW_CARD;
+
+    private static String  BUNDLE_NAV_ITEM_INDEX="navItemIndex";
+    private static String  BUNDLE_TOOLBAR_TITLE="toolBarTitle";
+    private static String  BUNDLE_CURRENT_TAG="cur_tag";
+
     // index to identify current nav menu item
     public static int navItemIndex = 0;
     private FloatingActionButton fab;
@@ -56,12 +61,13 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
     private TextView toolBarTitle;
     private FolderAddedListener folderAddedListener;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initialize();
-        addMostFavFoldersToNav();
+        showMostViewsFolder();
         setupToolBar();
         setListeners();
 
@@ -71,8 +77,9 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
             loadFragment();
         }
         else{
-            navItemIndex=savedInstanceState.getInt("number");
-            toolBarTitle.setText(savedInstanceState.getString("title"));
+            navItemIndex=savedInstanceState.getInt("BUNDLE_NAV_ITEM_INDEX");
+            toolBarTitle.setText(savedInstanceState.getString("BUNDLE_TOOLBAR_TITLE"));
+            CURRENT_TAG=savedInstanceState.getString(BUNDLE_CURRENT_TAG);
         }
         toggleFab();
 
@@ -145,11 +152,11 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
     public void setListeners() {
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
+                Folder folder;
+                setIconsToDefault();
                 switch (item.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.add_folder:
@@ -158,17 +165,32 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
                         break;
                     case R.id.net_search:
                         navItemIndex = 2;
-                        CURRENT_TAG = TAG_ADD_FOLDER;
+                        CURRENT_TAG = TAG_SEARCH_INTERNER;
                         break;
-
-
-                    default:
+                    case R.id.unsorted_item:
                         navItemIndex = 0;
-                }
-                if (item.isChecked()) {
-                    item.setChecked(false);
-                } else {
-                    item.setChecked(true);
+                        CURRENT_TAG = TAG_SHOW_CARD;
+                        Folder unsorted_folder=new Folder();
+                        unsorted_folder.setName(getResources().getString(R.string.unsorted_item_string));
+                        unsorted_folder.setID(-1);
+                        startFragmentWithFolder(item,unsorted_folder);
+                        break;
+                    case R.id.favourite_item:
+                        navItemIndex = 0;
+                        CURRENT_TAG = TAG_SHOW_CARD;
+                        Folder fav_folder=new Folder();
+                        fav_folder.setName(getResources().getString(R.string.favourite_item_string));
+                        fav_folder.setID(-2);
+                        startFragmentWithFolder(item,fav_folder);
+                        break;
+                    default:
+                        folder=RealmController.with(MainActivity.this).getFolderById(item.getItemId());
+                        navItemIndex = 0;
+                        CURRENT_TAG = TAG_SHOW_CARD;
+                        if (folder!=null) {
+                            startFragmentWithFolder(item,folder);
+                            return true;
+                        }
                 }
                 item.setChecked(true);
 
@@ -180,9 +202,29 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAddDialog();
+                showADdWordDialog();
             }
         });
+    }
+
+    public void startFragmentWithFolder(MenuItem item,Folder folder){
+        drawerLayout.closeDrawer(GravityCompat.START);
+        item.setChecked(true);
+        item.setIcon(R.drawable.ic_action_open_folder);
+        toolBarTitle.setText(folder.getName());
+        onFolderClicked(folder.getID());
+    }
+
+    public void onFolderClicked(int  folder_id){
+
+        Fragment fragment = ShowCardWithWords.newInstance(folder_id);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                android.R.anim.fade_out);
+        fragmentTransaction.replace(R.id.frame_layout, fragment, CURRENT_TAG);
+        fragmentTransaction.commit();
+        toggleFab();
+
     }
 
     public void setupToolBar() {
@@ -195,17 +237,17 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         Log.d("TAG", words.get(0).getEnWord());
     }
 
-    public void showAddDialog() {
+    public void showADdWordDialog() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View content = inflater.inflate(R.layout.add_word, null);
+        View content = inflater.inflate(R.layout.add_word_dialog, null);
         final EditText en_name = (EditText) content.findViewById(R.id.title);
         final EditText rus_name = (EditText) content.findViewById(R.id.author);
         final EditText trans = (EditText) content.findViewById(R.id.thumbnail);
 
         builder.setView(content)
-                .setTitle("Edit Book")
+                .setTitle(R.string.AddWord)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -235,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
 
     }
 
-    public void addMostFavFoldersToNav() {
+    public void showMostViewsFolder() {
         RealmController realmController = RealmController.with(MainActivity.this);
         List<Folder> folders = realmController.getFolders();
         Menu m = navigationView.getMenu();
@@ -245,20 +287,22 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         int count = 0;
         if (folders != null) {
             for (Folder folder : folders) {
+                if (count > 3) break;
                 subMenu.add(0, folder.getID(), Menu.NONE, folder.getName()).setIcon(R.drawable.ic_action_black_folder);
-                if (count > 5) break;
                 count++;
             }
         }
+        subMenu.add(0,R.id.unsorted_item,Menu.NONE,R.string.unsorted_item_string).setIcon(R.drawable.ic_action_black_folder);
+        subMenu.add(0,R.id.favourite_item,Menu.NONE,R.string.favourite_item_string).setIcon(R.drawable.ic_action_black_folder);
 
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        // Синхронизировать состояние переключения после того, как
-        // возникнет onRestoreInstanceState
-        // actionBarDrawerToggle.syncState();
+//         Синхронизировать состояние переключения после того, как
+//         возникнет onRestoreInstanceState
+         actionBarDrawerToggle.syncState();
     }
 
     @Override
@@ -324,15 +368,27 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
                 android.R.anim.fade_out);
         fragmentTransaction.replace(R.id.frame_layout, getFragment(), CURRENT_TAG);
         fragmentTransaction.commit();
-        addMostFavFoldersToNav();
+        showMostViewsFolder();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("number",navItemIndex);
-        outState.putString("title",toolBarTitle.getText().toString());
-        outState.putString("cur_tag",CURRENT_TAG);
-        Log.d("LOG","E");
+        outState.putInt(BUNDLE_NAV_ITEM_INDEX,navItemIndex);
+        outState.putString(BUNDLE_TOOLBAR_TITLE,toolBarTitle.getText().toString());
+        outState.putString(BUNDLE_CURRENT_TAG,CURRENT_TAG);
+    }
+
+    public void setIconsToDefault(){
+        Menu m = navigationView.getMenu();
+        MenuItem item = m.getItem(0);
+        SubMenu subMenu = item.getSubMenu();
+        for (int i=0;i<subMenu.size();i++){
+            MenuItem menuItem=subMenu.getItem(i);
+            if (menuItem.isChecked()){
+                menuItem.setChecked(false);
+                menuItem.setIcon(R.drawable.ic_action_black_folder);
+            }
+        }
     }
 }

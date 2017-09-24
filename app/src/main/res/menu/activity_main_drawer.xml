@@ -3,22 +3,13 @@
     <item android:title="@string/Folders">
     <menu>
         <item
-            android:id="@+id/eat"
+            android:id="@+id/unsorted_item"
             android:icon="@drawable/ic_action_black_folder"
-            android:title="Еда" />
+            android:title="@string/unsorted_item_string" />
         <item
-            android:id="@+id/animals"
+            android:id="@+id/favourite_item"
             android:icon="@drawable/ic_action_black_folder"
-            android:title="Животные" />
-        <item
-            android:id="@+id/countries"
-            android:icon="@drawable/ic_action_black_folder"
-            android:title="Страны" />
-
-        <item
-            android:id="@+id/favourites"
-            android:icon="@drawable/ic_action_black_folder"
-            android:title="Любимые" />
+            android:title="@string/unsorted_item_string" />
     </menu>
     </item>
 

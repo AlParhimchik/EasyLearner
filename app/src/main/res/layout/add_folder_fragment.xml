@@ -1,81 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingLeft="?listPreferredItemPaddingLeft"
-    android:paddingRight="?listPreferredItemPaddingRight"
-
-    android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true"
-    android:clickable="true"
-    android:id="@+id/add_folder_layout"
-    tools:context="com.example.sashok.easylearner.fragment.AddFolderFragment">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:text="@string/NewFolder"
-        android:textSize="25dp" />
-
-    <android.support.design.widget.TextInputLayout
+    >
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="1dp">
-
-        <EditText
-            android:id="@+id/folder_name_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/FolderName"
-            android:textSize="25dp"
-
-            />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        android:paddingLeft="?listPreferredItemPaddingLeft"
+        android:paddingRight="?listPreferredItemPaddingRight"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
+        android:clickable="true"
+        android:id="@+id/add_folder_layout"
+        tools:context="com.example.sashok.easylearner.fragment.AddFolderFragment">
 
         <TextView
-            android:id="@+id/add_words_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:layout_margin="10dp"
-            android:text="@string/chooseWords"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20dp" />
-    </android.support.design.widget.TextInputLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/btn_save_folder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="15dp"
-            android:text="@string/save"
-            android:textColor="@color/colorPrimary"
-            android:textSize="30dp" />
+            android:layout_marginTop="20dp"
+            android:text="@string/NewFolder"
+            android:textSize="25dp" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/add_folder_recycler"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/btn_save_folder"
-            android:scrollbars="vertical">
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp">
+
+            <EditText
+                android:id="@+id/folder_name_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/FolderName"
+                android:textSize="25dp"
+
+                />
+
+            <TextView
+                android:id="@+id/choose_word_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_margin="10dp"
+                android:text="@string/chooseWords"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20dp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/btn_save_folder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="15dp"
+                android:text="@string/save"
+                android:textColor="@color/colorPrimary"
+                android:textSize="30dp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/add_folder_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@id/btn_save_folder"
+                android:scrollbars="vertical">
 
 
-        </android.support.v7.widget.RecyclerView>
+            </android.support.v7.widget.RecyclerView>
 
 
 
-    </RelativeLayout>
+        </RelativeLayout>
 
 
-</LinearLayout>
+    </LinearLayout>
+    <include
+        layout="@layout/error_view"></include>
+</FrameLayout>

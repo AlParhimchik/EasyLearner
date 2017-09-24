@@ -122,6 +122,10 @@ public class RealmController  {
                 Number maxValue = realm.where(Folder.class).max("ID");
                 int pk = (maxValue != null) ? maxValue.intValue() + 1 : 1;
                 folder.setID(pk);
+                for (Word word:folder.getWords()){
+                    word.setFolderID(folder.getID());
+                    realm.copyToRealmOrUpdate(word);
+                }
                 realm.copyToRealmOrUpdate(folder);
             }
         });
@@ -141,6 +145,19 @@ public class RealmController  {
         });
         return  words;
 
+    }
+
+
+    public Folder getFolderById(final int ID){
+        final Folder[] folder = new Folder[1];
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Folder result=realm.where(Folder.class).equalTo("ID",ID).findFirst();
+                folder[0] =result;
+            }
+        });
+        return folder[0];
     }
 
     //xz ili tak

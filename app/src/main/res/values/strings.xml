@@ -11,5 +11,9 @@
     <string name="FolderName">Название темы</string>
     <string name="save">Сохранить</string>
     <string name="chooseWords">Выберите слова:</string>
-
+    <string name="AddWord">Добавить слово</string>
+    <string name="Error_no_Words_In_Folder">Нету слов в данной теме </string>
+    <string name="Error_no_Unfoldered_Words">Нету слов без темы , нельзя создать тему</string>
+    <string name="unsorted_item_string">Неотсортированые</string>
+    <string name="favourite_item_string">Любимые</string>
 </resources>

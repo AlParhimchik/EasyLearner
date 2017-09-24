@@ -13,5 +13,7 @@
         app:rotation_degrees="15"
         app:max_visible="1"
         app:min_adapter_stack="1" />
+    <include
+        layout="@layout/error_view"></include>
 </FrameLayout>
 
