@@ -28,7 +28,9 @@ public class Word extends RealmObject {
     @PrimaryKey
     private int ID;
 
-    public RealmList<RealmString> getTranslation() {
+
+    public RealmList<RealmString>getTranslation() {
+
         return translation;
     }
 

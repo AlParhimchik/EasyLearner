@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">EasyLearner</string>
     <string name="fav_folder">Избранные</string>
+    <string name="openDrawer">open</string>
+    <string name="closeDrawer">close</string>
+    <string name="addFolder">Новая папка</string>
+    <string name="search_in_net">Поиск в интернете</string>
+    <string name="Folders">Папки</string>
+
 </resources>

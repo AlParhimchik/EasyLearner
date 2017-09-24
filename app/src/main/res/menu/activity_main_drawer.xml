@@ -1,27 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <group android:checkableBehavior="single">
+    <item android:title="@string/Folders">
+    <menu>
         <item
-            android:id="@+id/nav_home"
-
+            android:id="@+id/eat"
+            android:icon="@drawable/ic_action_black_folder"
             android:title="Еда" />
         <item
-            android:id="@+id/nav_photos"
-
+            android:id="@+id/animals"
+            android:icon="@drawable/ic_action_black_folder"
             android:title="Животные" />
         <item
-            android:id="@+id/nav_movies"
-
+            android:id="@+id/countries"
+            android:icon="@drawable/ic_action_black_folder"
             android:title="Страны" />
 
         <item
-            android:id="@+id/nav_notifications"
+            android:id="@+id/favourites"
+            android:icon="@drawable/ic_action_black_folder"
+            android:title="Любимые" />
+    </menu>
+    </item>
 
-            android:title="@string/fav_folder" />
+<group android:checkableBehavior="single">
 
+            <item
+                android:icon="@drawable/ic_action_add_folder"
+                android:id="@+id/add_folder"
+                android:title="@string/addFolder"
+                >
+
+            </item>
+        <item android:id="@+id/net_search"
+            android:icon="@drawable/ic_action_search"
+            android:title="@string/search_in_net">
+
+        </item>
     </group>
-
-
 
 </menu>

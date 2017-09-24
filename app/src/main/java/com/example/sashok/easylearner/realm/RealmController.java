@@ -64,23 +64,16 @@ public class RealmController  {
     }
 
     public void addWord(final Word word){
-        Boolean result=false;
-        realm.executeTransactionAsync(new Realm.Transaction() {
+        realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                Number maxValue = realm.where(Word.class).max("ID");
+                int pk = (maxValue != null) ? maxValue.intValue() + 1 : 0;
+                word.setID(pk);
                 realm.copyToRealmOrUpdate(word);
             }
-        }, new Realm.Transaction.OnSuccess(){
-            @Override
-            public void onSuccess() {
-
-            }
-        },new Realm.Transaction.OnError() {
-            @Override
-            public void onError(Throwable error) {
-
-            }
         });
+
     }
     public  void deleteWord(final Word word){
         realm.executeTransaction(new Realm.Transaction() {
@@ -105,18 +98,21 @@ public class RealmController  {
         });
         return  words;
     }
-    public ArrayList<Word> getWords(){
-        final ArrayList<Word> link=new ArrayList<>();
+
+
+    public List<Folder> getFolders(){
+        final ArrayList<Folder> folders=new ArrayList<>();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmResults<Word>  words=realm.where(Word.class).findAll();
-                for (Word word:words){
-                    link.add(word);
+                RealmResults<Folder> result=realm.where(Folder.class).findAll();
+                for (Folder folder:result){
+                    folders.add(folder);
                 }
             }
         });
-        return  link;
+        return  folders;
+
     }
 
     public void addFolder(final  Folder folder){
@@ -147,5 +143,19 @@ public class RealmController  {
                 realm.where(Folder.class).contains("id",String.valueOf(folder.getID())).findFirst().deleteFromRealm();
             }
         });
+    }
+
+    public ArrayList<Word> getWords(){
+        final ArrayList<Word> link=new ArrayList<>();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<Word>  words=realm.where(Word.class).findAll();
+                for (Word word:words){
+                    link.add(word);
+                }
+            }
+        });
+        return  link;
     }
 }
