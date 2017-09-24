@@ -1,6 +1,9 @@
 package com.example.sashok.easylearner.model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import io.realm.RealmList;
@@ -16,6 +19,8 @@ public class Word extends RealmObject {
     private String enWord;
     private Boolean favourite;
     private Folder folderName;
+    private Date date;
+    private int countOfShow = 1;
 
     public int getID() {
         return ID;
@@ -58,5 +63,21 @@ public class Word extends RealmObject {
 
     public void setFolderName(Folder folderName) {
         this.folderName = folderName;
+    }
+
+    public Date getDate(){
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public int getCountOfShow() {
+        return countOfShow;
+    }
+
+    public void setCountOfShow(int countOfShow) {
+        this.countOfShow = countOfShow;
     }
 }
