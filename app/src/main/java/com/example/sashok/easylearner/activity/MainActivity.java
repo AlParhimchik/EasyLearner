@@ -23,11 +23,13 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.sashok.easylearner.R;
 import com.example.sashok.easylearner.fragment.AddFolderFragment;
 import com.example.sashok.easylearner.fragment.SearchInNetFragment;
 import com.example.sashok.easylearner.fragment.ShowCardWithWords;
+import com.example.sashok.easylearner.listener.FolderAddedListener;
 import com.example.sashok.easylearner.model.Folder;
 import com.example.sashok.easylearner.model.RealmString;
 import com.example.sashok.easylearner.model.Word;
@@ -38,21 +40,21 @@ import java.util.List;
 
 import io.realm.RealmList;
 
-public class MainActivity extends AppCompatActivity {
-    private FloatingActionButton fab;
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle actionBarDrawerToggle;
-    private Toolbar toolbar;
-    private NavigationView navigationView;
-
+public class MainActivity extends AppCompatActivity implements FolderAddedListener {
     // tags used to attach the fragments
     private static final String TAG_SHOW_CARD = "show_cards";
     private static final String TAG_ADD_FOLDER = "addFolder";
     private static final String TAG_SEARCH_INTERNER = "searchInternet";
     public static String CURRENT_TAG = TAG_SHOW_CARD;
-
     // index to identify current nav menu item
     public static int navItemIndex = 0;
+    private FloatingActionButton fab;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private Toolbar toolbar;
+    private NavigationView navigationView;
+    private TextView toolBarTitle;
+    private FolderAddedListener folderAddedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,11 @@ public class MainActivity extends AppCompatActivity {
             CURRENT_TAG = TAG_SHOW_CARD;
             loadFragment();
         }
+        else{
+            navItemIndex=savedInstanceState.getInt("number");
+            toolBarTitle.setText(savedInstanceState.getString("title"));
+        }
+        toggleFab();
 
     }
 
@@ -83,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                 android.R.anim.fade_out);
-        fragmentTransaction.replace(R.id.frame_layout, fragment,CURRENT_TAG);
+        fragmentTransaction.replace(R.id.frame_layout, fragment, CURRENT_TAG);
         fragmentTransaction.commit();
         toggleFab();
         drawerLayout.closeDrawers();
@@ -95,23 +102,27 @@ public class MainActivity extends AppCompatActivity {
             case 0:
 
                 ShowCardWithWords cardFragment = new ShowCardWithWords();
+                toolBarTitle.setText(R.string.app_name);
                 return cardFragment;
             case 1:
 
                 AddFolderFragment addFolderFragment = new AddFolderFragment();
+                toolBarTitle.setText(R.string.AddFolder);
                 return addFolderFragment;
             case 2:
                 SearchInNetFragment searchFragment = new SearchInNetFragment();
+                toolBarTitle.setText(R.string.search_in_net);
                 return searchFragment;
             default:
                 return new ShowCardWithWords();
         }
 
-        }
+    }
 
 
     public void initialize() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolBarTitle = (TextView) findViewById(R.id.toolbar_title);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
@@ -138,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
                 switch (item.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.add_folder:
@@ -226,20 +238,20 @@ public class MainActivity extends AppCompatActivity {
     public void addMostFavFoldersToNav() {
         RealmController realmController = RealmController.with(MainActivity.this);
         List<Folder> folders = realmController.getFolders();
+        Menu m = navigationView.getMenu();
+        MenuItem item = m.getItem(0);
+        SubMenu subMenu = item.getSubMenu();
+        subMenu.clear();
         int count = 0;
         if (folders != null) {
             for (Folder folder : folders) {
-                Menu m = navigationView.getMenu();
-                MenuItem item = m.getItem(0);
-                SubMenu subMenu = item.getSubMenu();
-                subMenu.add(folder.getName()).setIcon(R.drawable.ic_action_black_folder);
+                subMenu.add(0, folder.getID(), Menu.NONE, folder.getName()).setIcon(R.drawable.ic_action_black_folder);
                 if (count > 5) break;
                 count++;
             }
         }
 
     }
-
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -302,4 +314,25 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onFolderAddedListener(Fragment fragment) {
+        navItemIndex = 0;
+        CURRENT_TAG = TAG_SHOW_CARD;
+        toggleFab();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                android.R.anim.fade_out);
+        fragmentTransaction.replace(R.id.frame_layout, getFragment(), CURRENT_TAG);
+        fragmentTransaction.commit();
+        addMostFavFoldersToNav();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("number",navItemIndex);
+        outState.putString("title",toolBarTitle.getText().toString());
+        outState.putString("cur_tag",CURRENT_TAG);
+        Log.d("LOG","E");
+    }
 }

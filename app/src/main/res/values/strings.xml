@@ -3,8 +3,13 @@
     <string name="fav_folder">Избранные</string>
     <string name="openDrawer">open</string>
     <string name="closeDrawer">close</string>
-    <string name="addFolder">Новая папка</string>
-    <string name="search_in_net">Поиск в интернете</string>
-    <string name="Folders">Папки</string>
+    <string name="addFolder">Новая тема</string>
+    <string name="search_in_net">Поиск в Интернете</string>
+    <string name="Folders">Темы</string>
+    <string name="NewFolder">Новая тема</string>
+    <string name="AddFolder">Добавить тему</string>
+    <string name="FolderName">Название темы</string>
+    <string name="save">Сохранить</string>
+    <string name="chooseWords">Выберите слова:</string>
 
 </resources>

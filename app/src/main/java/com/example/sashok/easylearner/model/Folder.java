@@ -13,6 +13,10 @@ public class Folder extends RealmObject {
         return name;
     }
 
+    public  Folder(){
+        words=new RealmList<>();
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -28,6 +32,10 @@ public class Folder extends RealmObject {
 
     public void setID(int ID) {
         this.ID = ID;
+    }
+
+    public void setWord(Word word){
+        if (!words.contains(word))words.add(word);
     }
 
     public RealmList<Word> getWords() {

@@ -9,4 +9,5 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
     <color name="white">#FFFFFF</color>
+    <color name="row_activated">#e0e0e0</color>
 </resources>

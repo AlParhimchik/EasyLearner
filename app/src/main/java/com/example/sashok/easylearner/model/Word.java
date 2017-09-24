@@ -1,14 +1,9 @@
 package com.example.sashok.easylearner.model;
 
-import android.support.annotation.RawRes;
 import android.support.v7.widget.CardView;
 import android.widget.TextView;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -23,13 +18,34 @@ public class Word extends RealmObject {
     private RealmList<RealmString> translation;
     private String enWord;
     private Boolean favourite;
-    private Folder folderName;
+
+    public int getFolderID() {
+        return folderID;
+    }
+
+    public void setFolderID(int folderID) {
+        this.folderID = folderID;
+    }
+
+    public CardView getCardView() {
+        return cardView;
+    }
+
+    public void setCardView(CardView cardView) {
+        this.cardView = cardView;
+    }
+
+    private int folderID;
     private Date date;
     private int countOfShow = 1;
     @Ignore
     public CardView cardView;
     @Ignore
     public TextView textView;
+    @PrimaryKey
+    private int ID;
+
+
     public int getID() {
         return ID;
     }
@@ -38,11 +54,7 @@ public class Word extends RealmObject {
         this.ID = ID;
     }
 
-    @PrimaryKey
-    private int ID;
-
-
-    public RealmList<RealmString>getTranslation() {
+    public RealmList<RealmString> getTranslation() {
 
         return translation;
     }
@@ -67,15 +79,8 @@ public class Word extends RealmObject {
         this.favourite = favourite;
     }
 
-    public Folder getFolderName() {
-        return folderName;
-    }
 
-    public void setFolderName(Folder folderName) {
-        this.folderName = folderName;
-    }
-
-    public Date getDate(){
+    public Date getDate() {
         return date;
     }
 
