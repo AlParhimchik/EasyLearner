@@ -2,6 +2,7 @@ package com.example.sashok.easylearner.model;
 
 import java.util.List;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -10,7 +11,7 @@ import io.realm.annotations.PrimaryKey;
  */
 
 public class Word extends RealmObject {
-    private List<String> translation;
+    private RealmList<RealmString> translation;
     private String enWord;
     private Boolean favourite;
     private Folder folderName;
@@ -26,11 +27,11 @@ public class Word extends RealmObject {
     @PrimaryKey
     private int ID;
 
-    public List<String> getTranslation() {
+    public RealmList<RealmString>getTranslation() {
         return translation;
     }
 
-    public void setTranslation(List<String> translation) {
+    public void setTranslation(RealmList<RealmString> translation) {
         this.translation = translation;
     }
 
