@@ -122,6 +122,7 @@ public class RealmController  {
                 Number maxValue = realm.where(Folder.class).max("ID");
                 int pk = (maxValue != null) ? maxValue.intValue() + 1 : 1;
                 folder.setID(pk);
+                List<Word>word_in_folder=new ArrayList<Word>();
                 for (Word word:folder.getWords()){
                     word.setFolderID(folder.getID());
                     realm.copyToRealmOrUpdate(word);

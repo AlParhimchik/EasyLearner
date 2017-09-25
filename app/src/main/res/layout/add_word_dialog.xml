@@ -14,7 +14,7 @@
         android:inputType="text" />
 
     <EditText
-        android:id="@+id/author"
+        android:id="@+id/word_in_rus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin"
@@ -22,7 +22,7 @@
         android:inputType="text" />
 
     <EditText
-        android:id="@+id/thumbnail"
+        android:id="@+id/transcription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin"
