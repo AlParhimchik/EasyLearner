@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sashok.easylearner.R;
@@ -67,12 +68,19 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         String headerTitle = ((Folder)getGroup(groupPosition)).getName();
+        ImageView indicator;
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.folder_item_expandable_list_view, null);
-        }
 
+        }
+        indicator=(ImageView)convertView.findViewById(R.id.toggleIcon);
+        if (isExpanded) {
+            indicator.setImageResource(R.drawable.ic_action_collapse);
+        }else{
+            indicator.setImageResource(R.drawable.expanse_collapse_icon);
+        }
         TextView lblListHeader = (TextView) convertView
                 .findViewById(R.id.headingTxt);
         lblListHeader.setText(headerTitle);

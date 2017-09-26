@@ -9,7 +9,7 @@
         android:layout_margin="15dp"
         android:paddingBottom="20dp"
         android:id="@+id/headingTxt"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:text="hello"
@@ -19,14 +19,14 @@
         android:typeface="sans" />
 
 
-    <!--<ImageView-->
-        <!--android:layout_marginLeft="20dp"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:id="@+id/toggleIcon"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:src="@drawable/ic_action_expanse" />-->
+    <ImageView
+        android:layout_marginLeft="20dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:id="@+id/toggleIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_action_expanse" />
 </RelativeLayout>
 
 

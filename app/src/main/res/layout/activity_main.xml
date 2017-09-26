@@ -10,6 +10,7 @@
     <!-- The main content view -->
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
+        android:id="@+id/coord"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
@@ -17,23 +18,26 @@
             android:id="@+id/toolbar"
             layout="@layout/toolbar_layout" />
 
+
+
+        <FrameLayout
+            android:orientation="vertical"
+            android:id="@+id/frame_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="?attr/actionBarSize"
+            >
+
+        </FrameLayout>
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
+            app:layout_anchorGravity="bottom|right|end"
             android:layout_margin="@dimen/fab_margin"
             app:backgroundTint="@color/colorPrimary"
-            app:srcCompat="@drawable/ic_action_add_word" />
-
-        <FrameLayout
-            android:id="@+id/frame_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        </FrameLayout>
+            app:srcCompat="@drawable/ic_action_add_word" /> 
     </android.support.design.widget.CoordinatorLayout>
 
 
