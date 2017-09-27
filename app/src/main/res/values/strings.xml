@@ -23,4 +23,6 @@
     <string name="cancel">Отменить</string>
     <string name="change_folder">изменить</string>
     <string name="default_folder">Не выбрана</string>
+    <string name="change_word">Изменить слово</string>
+
 </resources>

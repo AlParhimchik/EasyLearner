@@ -1,5 +1,6 @@
 package com.example.sashok.easylearner.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,7 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sashok.easylearner.R;
+import com.example.sashok.easylearner.activity.MainActivity;
+import com.example.sashok.easylearner.fragment.AddWordDialogFragment;
 import com.example.sashok.easylearner.model.Folder;
+import com.example.sashok.easylearner.realm.RealmController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +25,12 @@ import java.util.List;
 
 public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
-    private Context _context;
+    private Activity _context;
    // header titles
     // child data in format of header title, child title
     private List<Folder> listFolders;
 
-    public ExpandableListViewAdapter(Context context, List<Folder> folders) {
+    public ExpandableListViewAdapter(Activity context, List<Folder> folders) {
         this._context=context;
         this.listFolders=folders;
     }
@@ -103,14 +107,23 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        if (listFolders.get(groupPosition).getWords().size()==0) return null;
         String headerTitle = ((Folder)getGroup(groupPosition)).getWords().get(childPosition).getEnWord();
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.words_item_expendable_list_view, null);
         }
-
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddWordDialogFragment dialogFragment=new AddWordDialogFragment(_context,(MainActivity)_context,listFolders.get(groupPosition).getWords().get(childPosition));
+                dialogFragment.getWindow().getAttributes().windowAnimations=R.style.RegistrationDialogAnimation;
+                dialogFragment.setTitle(R.string.change_word);
+                dialogFragment.show();
+            }
+        });
         TextView lblListHeader = (TextView) convertView
                 .findViewById(R.id.titleTxt);
         lblListHeader.setText(headerTitle);
@@ -127,6 +140,11 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
     }
     public void onExpanseFolder(int folderPos){
+    }
 
+    @Override
+    public void notifyDataSetChanged() {
+
+        super.notifyDataSetChanged();
     }
 }

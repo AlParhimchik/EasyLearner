@@ -1,52 +1,41 @@
 package com.example.sashok.easylearner.activity;
 
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.sashok.easylearner.R;
-import com.example.sashok.easylearner.adapter.ExpandableListViewAdapter;
 import com.example.sashok.easylearner.fragment.AddFolderFragment;
 import com.example.sashok.easylearner.fragment.AddWordDialogFragment;
 import com.example.sashok.easylearner.fragment.ExpandableListFragment;
 import com.example.sashok.easylearner.fragment.SearchInNetFragment;
 import com.example.sashok.easylearner.fragment.ShowCardWithWords;
 import com.example.sashok.easylearner.listener.FolderAddedListener;
-import com.example.sashok.easylearner.listener.WordAddedListener;
+import com.example.sashok.easylearner.listener.WordChangedListener;
 import com.example.sashok.easylearner.model.Folder;
 import com.example.sashok.easylearner.model.FragmentTags;
 import com.example.sashok.easylearner.model.FragmentTagsController;
-import com.example.sashok.easylearner.model.RealmString;
-import com.example.sashok.easylearner.model.Word;
 import com.example.sashok.easylearner.realm.RealmController;
 
 import java.util.List;
 
-import io.realm.RealmList;
-
-public class MainActivity extends AppCompatActivity implements FolderAddedListener,NavigationView.OnNavigationItemSelectedListener , WordAddedListener{
+public class MainActivity extends AppCompatActivity implements FolderAddedListener, NavigationView.OnNavigationItemSelectedListener, WordChangedListener {
     // tags used to attach the fragments
 
     public static FragmentTags CURRENT_TAG;
@@ -76,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         showMostViewsFolders();
         setSupportActionBar(toolbar);
         setListeners();
-        if (savedInstanceState==null ) {
+        if (savedInstanceState == null) {
             CURRENT_TAG = FragmentTags.TAG_LIST_FOLDER;
             loadFragment(); // if app startes load home fragment
         }
@@ -159,8 +148,9 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddWordDialogFragment dialogFragment=new AddWordDialogFragment(MainActivity.this,MainActivity.this);
-                dialogFragment.getWindow().getAttributes().windowAnimations=R.style.RegistrationDialogAnimation;
+                AddWordDialogFragment dialogFragment = new AddWordDialogFragment(MainActivity.this, MainActivity.this);
+                dialogFragment.getWindow().getAttributes().windowAnimations = R.style.RegistrationDialogAnimation;
+                dialogFragment.setTitle(R.string.AddWord);
                 dialogFragment.show();
             }
         });
@@ -205,8 +195,7 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }
-        else {
+        } else {
             setIconsToDefault();
             if (CURRENT_TAG != FragmentTags.TAG_LIST_FOLDER) {
 //            navItemIndex = 0;
@@ -268,8 +257,8 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
                 menuItem.setIcon(R.drawable.ic_action_black_folder);
             }
         }
-        for (int i=1;i<m.size();i++){
-            MenuItem menuItem=m.getItem(i);
+        for (int i = 1; i < m.size(); i++) {
+            MenuItem menuItem = m.getItem(i);
             if (menuItem.isChecked()) menuItem.setChecked(false);
         }
     }
@@ -318,10 +307,20 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
 
     @Override
     public void onWordAdded() {
-        if (CURRENT_TAG==FragmentTags.TAG_LIST_FOLDER){
-            Fragment curFragment= getSupportFragmentManager().findFragmentByTag(FragmentTagsController.toString(CURRENT_TAG));
-            if (curFragment  instanceof ExpandableListFragment){
+        if (CURRENT_TAG == FragmentTags.TAG_LIST_FOLDER) {
+            Fragment curFragment = getSupportFragmentManager().findFragmentByTag(FragmentTagsController.toString(CURRENT_TAG));
+            if (curFragment instanceof ExpandableListFragment) {
                 ((ExpandableListFragment) curFragment).onNewWordAdd();
+            }
+        }
+    }
+
+    @Override
+    public void onWordDeleteFolder() {
+        if (CURRENT_TAG == FragmentTags.TAG_LIST_FOLDER) {
+            Fragment curFragment = getSupportFragmentManager().findFragmentByTag(FragmentTagsController.toString(CURRENT_TAG));
+            if (curFragment instanceof ExpandableListFragment) {
+                ((ExpandableListFragment) curFragment).onWordDeletedFolder();
             }
         }
     }
@@ -329,7 +328,7 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        Log.i("TAg","LOL");
+        Log.i("TAg", "LOL");
 
     }
 
@@ -337,8 +336,8 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         setIconsToDefault();
-        MenuItem item=navigationView.getMenu().findItem(savedInstanceState.getInt("item"));
-        if (item!=null) item.setChecked(true);
+        MenuItem item = navigationView.getMenu().findItem(savedInstanceState.getInt("item"));
+        if (item != null) item.setChecked(true);
         toolBarTitle.setText(savedInstanceState.getString(BUNDLE_TOOLBAR_TITLE));
         CURRENT_TAG = savedInstanceState.getParcelable(BUNDLE_CURRENT_TAG);
 
@@ -351,30 +350,31 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         //outState.putInt(BUNDLE_NAV_ITEM_INDEX, navItemIndex);
         outState.putString(BUNDLE_TOOLBAR_TITLE, toolBarTitle.getText().toString());
         outState.putParcelable(BUNDLE_CURRENT_TAG, CURRENT_TAG);
-        Menu menu=navigationView.getMenu();
+        Menu menu = navigationView.getMenu();
         MenuItem item;
-        int selectedItemId=-1;
+        int selectedItemId = -1;
         SubMenu subMenu;
-        for (int i=0;i<menu.size();i++){
-            if (selectedItemId!=-1 ) break;;
-            item=menu.getItem(i);
-            if (item.getSubMenu()!=null){
-                subMenu=item.getSubMenu();
-                for (int j=0;j<subMenu.size();j++){
-                    if (subMenu.getItem(j).isChecked()){
-                        selectedItemId=subMenu.getItem(j).getItemId();
+        for (int i = 0; i < menu.size(); i++) {
+            if (selectedItemId != -1) break;
+            ;
+            item = menu.getItem(i);
+            if (item.getSubMenu() != null) {
+                subMenu = item.getSubMenu();
+                for (int j = 0; j < subMenu.size(); j++) {
+                    if (subMenu.getItem(j).isChecked()) {
+                        selectedItemId = subMenu.getItem(j).getItemId();
                     }
 
                 }
             }
-            if (item.isChecked()){
-                selectedItemId=item.getItemId();
+            if (item.isChecked()) {
+                selectedItemId = item.getItemId();
 
             }
 
 
         }
-        outState.putInt("item",selectedItemId);
+        outState.putInt("item", selectedItemId);
     }
 
     @Override

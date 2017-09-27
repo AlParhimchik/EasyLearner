@@ -3,8 +3,10 @@ package com.example.sashok.easylearner.realm;
 import android.app.Activity;
 import android.app.Application;
 import android.app.Fragment;
+import android.util.Log;
 
 import com.example.sashok.easylearner.model.Folder;
+import com.example.sashok.easylearner.model.RealmString;
 import com.example.sashok.easylearner.model.Word;
 
 import java.util.ArrayList;
@@ -74,6 +76,14 @@ public class RealmController  {
             }
         });
 
+    }
+    public void updateWord(final Word word){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealmOrUpdate(word);
+            }
+        });
     }
     public  void deleteWord(final Word word){
         realm.executeTransaction(new Realm.Transaction() {
@@ -197,6 +207,28 @@ public class RealmController  {
         });
     }
 
+    public void deleteAllWordTranslation(final Word word) {
+       realm.executeTransaction(new Realm.Transaction() {
+           @Override
+           public void execute(Realm realm) {
+               int size=word.getTranslation().size();
+              for(int i=0;i<size;i++){
+                  word.getTranslation().remove(0);
+              }
+
+           }
+       });
+    }
+
+    public void changeFolderID(final Word word, final int new_folder_id){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                word.setFolderID(new_folder_id);
+            }
+        });
+    }
+
     public ArrayList<Word> getWords(){
         final ArrayList<Word> link=new ArrayList<>();
         realm.executeTransaction(new Realm.Transaction() {
@@ -221,5 +253,15 @@ public class RealmController  {
             }
         });
         return word[0];
+    }
+
+    public void deleteWordFromFolder(final Folder folder_of_word_on_view, final Word word) {
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                folder_of_word_on_view.getWords().remove(word);
+            }
+        });
     }
 }

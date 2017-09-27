@@ -35,7 +35,7 @@ public class ExpandableListFragment extends Fragment {
     private boolean reverseAllAnimations = false;
     private static int currentSelectedIndex = -1;
     private ExpandableListAdapterListener listAdapterListener;
-
+    private  RealmController realmController;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,9 +47,9 @@ public class ExpandableListFragment extends Fragment {
         View view = inflater.inflate(R.layout.expandable_list_fragment, container, false);
         mContext = getContext();
         mExpandableView = (ExpandableListView) view.findViewById(R.id.expandableView);
-        RealmController realmController = RealmController.with(getActivity());
+        realmController = RealmController.with(getActivity());
         List<Folder> folders = realmController.getFolders();
-        mAdapter = new ExpandableListViewAdapter(getContext(), folders);
+        mAdapter = new ExpandableListViewAdapter(getActivity(), folders);
         mExpandableView.setAdapter(mAdapter);
         mExpandableView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
@@ -102,4 +102,8 @@ public class ExpandableListFragment extends Fragment {
         return new ExpandableListFragment();
     }
 
+    public void onWordDeletedFolder() {
+      //  mAdapter=new ExpandableListViewAdapter(getActivity(),realmController.getFolders());
+        mAdapter.notifyDataSetChanged();
+    }
 }

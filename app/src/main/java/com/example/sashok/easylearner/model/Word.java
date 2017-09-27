@@ -64,14 +64,14 @@ public class Word extends RealmObject {
     }
 
     public void setTranslation(RealmList<RealmString> translation) {
-        for (int i=0;i<translation.size();i++)
-        this.translation.add(translation.get(i));
+        for (RealmString string:translation)
+        this.translation.add(string);
     }
 
-    public void setTranslation(String translation){
-        RealmString string=new RealmString();
-        string.string_name=translation;
-        this.translation.add(string);
+    public void setTranslation(RealmString string){
+        if (translation==null) translation=new RealmList<>();
+
+        if (!this.translation.contains(string)) this.translation.add(string);
     }
 
     public String getEnWord() {
@@ -106,4 +106,5 @@ public class Word extends RealmObject {
     public void setCountOfShow(int countOfShow) {
         this.countOfShow = countOfShow;
     }
+
 }
