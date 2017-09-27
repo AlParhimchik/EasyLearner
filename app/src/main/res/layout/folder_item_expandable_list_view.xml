@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/folder_view"
     android:layout_width="match_parent"
+    android:background="@drawable/expandable_list_folder_row"
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
@@ -20,7 +21,7 @@
 
 
     <ImageView
-        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:id="@+id/toggleIcon"

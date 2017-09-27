@@ -1,57 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/add_folder_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
-    <LinearLayout
+    android:clickable="true"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:paddingLeft="?listPreferredItemPaddingLeft"
+    android:paddingRight="?listPreferredItemPaddingRight"
+    tools:context="com.example.sashok.easylearner.fragment.AddFolderFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="@string/NewFolder"
+        android:textSize="25dp" />
+
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="invisible"
-        android:paddingLeft="?listPreferredItemPaddingLeft"
-        android:paddingRight="?listPreferredItemPaddingRight"
-        android:descendantFocusability="beforeDescendants"
-        android:focusableInTouchMode="true"
-        android:clickable="true"
-        android:id="@+id/add_folder_layout"
-        tools:context="com.example.sashok.easylearner.fragment.AddFolderFragment">
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:text="@string/NewFolder"
-            android:textSize="25dp" />
-
-        <android.support.design.widget.TextInputLayout
+        <EditText
+            android:id="@+id/folder_name_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="1dp">
+            android:hint="@string/FolderName"
+            android:textSize="25dp"
 
-            <EditText
-                android:id="@+id/folder_name_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/FolderName"
-                android:textSize="25dp"
+            />
 
-                />
+        <TextView
+            android:id="@+id/choose_word_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/chooseWords"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20dp" />
+    </android.support.design.widget.TextInputLayout>
 
-            <TextView
-                android:id="@+id/choose_word_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_margin="10dp"
-                android:text="@string/chooseWords"
-                android:textColor="@color/colorPrimary"
-                android:textSize="20dp" />
-        </android.support.design.widget.TextInputLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <RelativeLayout
+            android:id="@+id/recycler_view_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -78,11 +79,12 @@
             </android.support.v7.widget.RecyclerView>
 
 
-
         </RelativeLayout>
 
+        <include layout="@layout/error_view"></include>
+    </FrameLayout>
 
-    </LinearLayout>
-    <include
-        layout="@layout/error_view"></include>
-</FrameLayout>
+
+</LinearLayout>
+
+

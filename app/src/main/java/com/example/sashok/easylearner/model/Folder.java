@@ -35,7 +35,7 @@ public class Folder extends RealmObject {
     }
 
     public void setWord(Word word){
-        if (!words.contains(word))words.add(word);
+        if (!words.contains(word)) words.add(word);
     }
 
     public RealmList<Word> getWords() {
@@ -44,5 +44,17 @@ public class Folder extends RealmObject {
 
     public void setWords(RealmList<Word> words) {
         this.words = words;
+    }
+
+    @Override
+    public String toString() {
+        return this.getName();
+    }
+
+    public boolean isWordInFolder(int word_id){
+       for (Word word:getWords()){
+           if (word.getID()==word_id) return true;
+       }
+       return false;
     }
 }

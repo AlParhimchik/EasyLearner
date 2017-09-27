@@ -40,8 +40,10 @@ public class AddFolderFragment extends Fragment {
     private FolderAddedListener folderAddedListener;
     private LinearLayout mainLayout;
     private TextView errorText;
-    private  List<Word> words;
-    private  RecyclerView.LayoutManager mLayoutManager;
+    private List<Word> words;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private TextView choose_word_textview;
+
     public AddFolderFragment() {
 
     }
@@ -73,22 +75,29 @@ public class AddFolderFragment extends Fragment {
         View main_view = inflater.inflate(R.layout.add_folder_fragment, container, false);
         initComponents(main_view);
         words = RealmController.with(getActivity()).getWordsWithoutFolder();
-        if (words.size()==0) noAvailableAWords();
-        else{
-            errorText.setVisibility(View.INVISIBLE);
-            mainLayout.setVisibility(View.VISIBLE);
-            setRecyclerVIew();
-            setListeners();
-        }
-
-
-
-
-
+        showView();
+//        if (words.size()==0) noAvailableAWords();
+//        else{
+        errorText.setVisibility(View.INVISIBLE);
+        mainLayout.setVisibility(View.VISIBLE);
+        setRecyclerVIew();
+        setListeners();
         return main_view;
     }
 
-    private void setRecyclerVIew(){
+    private void showView() {
+        if (words.size() == 0) {
+            choose_word_textview.setVisibility(View.INVISIBLE);
+            recyclerView.setVisibility(View.INVISIBLE);
+            errorText.setVisibility(View.VISIBLE);
+        } else {
+            choose_word_textview.setVisibility(View.VISIBLE);
+            errorText.setVisibility(View.INVISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setRecyclerVIew() {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
@@ -97,16 +106,18 @@ public class AddFolderFragment extends Fragment {
 
     }
 
-    private  void initComponents(View main_view){
+    private void initComponents(View main_view) {
         mainLayout = (LinearLayout) main_view.findViewById(R.id.add_folder_layout);
         recyclerView = (RecyclerView) main_view.findViewById(R.id.add_folder_recycler);
         btnSave = (TextView) main_view.findViewById(R.id.btn_save_folder);
         folderName = (EditText) main_view.findViewById(R.id.folder_name_edit_text);
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        errorText=(TextView)main_view.findViewById(R.id.error_text_no_words);
+        errorText = (TextView) main_view.findViewById(R.id.error_text_no_words);
+        errorText.setText(R.string.Error_no_Words_In_Folder);
+        choose_word_textview = (TextView) main_view.findViewById(R.id.choose_word_textview);
     }
 
-    private void setListeners(){
+    private void setListeners() {
         mainLayout.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -128,12 +139,6 @@ public class AddFolderFragment extends Fragment {
 
             }
         });
-    }
-
-    public void noAvailableAWords() {
-        errorText.setText(R.string.Error_no_Unfoldered_Words);
-        mainLayout.setVisibility(View.INVISIBLE);
-        errorText.setVisibility(View.VISIBLE);
     }
 
     private void hideKeyBoard(View view) {

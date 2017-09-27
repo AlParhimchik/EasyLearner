@@ -29,8 +29,7 @@ public class CardWordAdapter extends ArrayAdapter<Word> {
     private Animation animation2;
     private CardView card_all;
     private ArrayList<Word> list=new ArrayList<>();
-    private int stack_pop=0;
-    public CardWordAdapter(Context context, ArrayList<Word> words){
+     public CardWordAdapter(Context context, ArrayList<Word> words){
         super(context,0);
         this.words = words;
         this.layoutInflater = LayoutInflater.from(context);

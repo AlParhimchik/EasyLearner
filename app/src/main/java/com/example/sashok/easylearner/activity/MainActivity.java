@@ -29,10 +29,12 @@ import android.widget.TextView;
 import com.example.sashok.easylearner.R;
 import com.example.sashok.easylearner.adapter.ExpandableListViewAdapter;
 import com.example.sashok.easylearner.fragment.AddFolderFragment;
+import com.example.sashok.easylearner.fragment.AddWordDialogFragment;
 import com.example.sashok.easylearner.fragment.ExpandableListFragment;
 import com.example.sashok.easylearner.fragment.SearchInNetFragment;
 import com.example.sashok.easylearner.fragment.ShowCardWithWords;
 import com.example.sashok.easylearner.listener.FolderAddedListener;
+import com.example.sashok.easylearner.listener.WordAddedListener;
 import com.example.sashok.easylearner.model.Folder;
 import com.example.sashok.easylearner.model.FragmentTags;
 import com.example.sashok.easylearner.model.FragmentTagsController;
@@ -44,7 +46,7 @@ import java.util.List;
 
 import io.realm.RealmList;
 
-public class MainActivity extends AppCompatActivity implements FolderAddedListener,NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements FolderAddedListener,NavigationView.OnNavigationItemSelectedListener , WordAddedListener{
     // tags used to attach the fragments
 
     public static FragmentTags CURRENT_TAG;
@@ -65,8 +67,6 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
     private TextView toolBarTitle;
     //used when user addes new folder
     private FolderAddedListener folderAddedListener;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,8 +94,8 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         }
         Fragment fragment = getFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                android.R.anim.fade_out);
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
+                android.R.anim.slide_out_right);
         fragmentTransaction.replace(R.id.frame_layout, fragment, FragmentTagsController.toString(CURRENT_TAG));
         fragmentTransaction.commit();
         toggleFab();
@@ -151,8 +151,6 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         fab = (FloatingActionButton) findViewById(R.id.fab);
     }
 
-
-
     public void setListeners() {
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
@@ -161,26 +159,11 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showADdWordDialog();
+                AddWordDialogFragment dialogFragment=new AddWordDialogFragment(MainActivity.this,MainActivity.this);
+                dialogFragment.getWindow().getAttributes().windowAnimations=R.style.RegistrationDialogAnimation;
+                dialogFragment.show();
             }
         });
-    }
-
-    @Override
-    public void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        Log.i("TAg","LOL");
-
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        setIconsToDefault();
-        MenuItem item=navigationView.getMenu().findItem(savedInstanceState.getInt("item"));
-        if (item!=null) item.setChecked(true);
-        toolBarTitle.setText(savedInstanceState.getString(BUNDLE_TOOLBAR_TITLE));
-        CURRENT_TAG = savedInstanceState.getParcelable(BUNDLE_CURRENT_TAG);
     }
 
     public void startFragmentWithFolder(MenuItem item, Folder folder) {
@@ -190,60 +173,11 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         toolBarTitle.setText(folder.getName());
         Fragment fragment = ShowCardWithWords.newInstance(folder.getID());
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                android.R.anim.fade_out);
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
+                android.R.anim.slide_out_right);
         fragmentTransaction.replace(R.id.frame_layout, fragment, FragmentTagsController.toString(CURRENT_TAG));
         fragmentTransaction.commit();
         toggleFab();
-    }
-
-    public void showADdWordDialog() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View content = inflater.inflate(R.layout.add_word_dialog, null);
-        final EditText en_name = (EditText) content.findViewById(R.id.word_in_engl);
-        final EditText rus_name = (EditText) content.findViewById(R.id.word_in_rus);
-        final EditText trans = (EditText) content.findViewById(R.id.transcription);
-
-        builder.setView(content)
-                .setTitle(R.string.AddWord)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        Word word = new Word();
-                        word.setEnWord(en_name.getText().toString());
-                        word.setFavourite(false);
-                        RealmList<RealmString> strings = new RealmList<>();
-                        RealmString string = new RealmString();
-                        string.string_name = rus_name.getText().toString();
-                        strings.add(string);
-                        word.setTranslation(strings);
-                        RealmController controller = RealmController.with(MainActivity.this);
-                        controller.addWord(word);
-                        onNewWordAdd();
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-    }
-
-    private void onNewWordAdd() {
-        if (CURRENT_TAG==FragmentTags.TAG_LIST_FOLDER){
-            Fragment curFragment= getSupportFragmentManager().findFragmentByTag(FragmentTagsController.toString(CURRENT_TAG));
-            if (curFragment  instanceof ExpandableListFragment){
-                ((ExpandableListFragment) curFragment).onNewWordAdd();
-            }
-        }
     }
 
     public void showMostViewsFolders() {
@@ -264,22 +198,6 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         subMenu.add(0, R.id.unsorted_item, Menu.NONE, R.string.unsorted_item_string).setIcon(R.drawable.ic_action_black_folder);
         subMenu.add(0, R.id.favourite_item, Menu.NONE, R.string.favourite_item_string).setIcon(R.drawable.ic_action_black_folder);
 
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-//         Синхронизировать состояние переключения после того, как
-//         возникнет onRestoreInstanceState
-        actionBarDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Передать любые изменения конфигурации переключателям
-        // drawer'а
-        actionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -335,45 +253,8 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
     public void onFolderAddedListener(Fragment fragment) {
         //navItemIndex = 0;
         CURRENT_TAG = FragmentTags.TAG_LIST_FOLDER;
-        toggleFab();
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                android.R.anim.fade_out);
-        fragmentTransaction.replace(R.id.frame_layout, getFragment(), FragmentTagsController.toString(CURRENT_TAG));
-        fragmentTransaction.commit();
+        loadFragment();
         showMostViewsFolders();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        //outState.putInt(BUNDLE_NAV_ITEM_INDEX, navItemIndex);
-        outState.putString(BUNDLE_TOOLBAR_TITLE, toolBarTitle.getText().toString());
-        outState.putParcelable(BUNDLE_CURRENT_TAG, CURRENT_TAG);
-        Menu menu=navigationView.getMenu();
-        MenuItem item;
-        int selectedItemId=-1;
-        SubMenu subMenu;
-        for (int i=0;i<menu.size();i++){
-        if (selectedItemId!=-1 ) break;;
-            item=menu.getItem(i);
-            if (item.getSubMenu()!=null){
-                subMenu=item.getSubMenu();
-                for (int j=0;j<subMenu.size();j++){
-                    if (subMenu.getItem(j).isChecked()){
-                        selectedItemId=subMenu.getItem(j).getItemId();
-                    }
-
-                }
-            }
-            if (item.isChecked()){
-                selectedItemId=item.getItemId();
-
-            }
-
-
-        }
-        outState.putInt("item",selectedItemId);
     }
 
     public void setIconsToDefault() {
@@ -401,32 +282,27 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         switch (item.getItemId()) {
             //Replacing the main content with ContentFragment Which is our Inbox View;
             case R.id.add_folder:
-//                        navItemIndex = 2;
                 CURRENT_TAG = FragmentTags.TAG_ADD_FOLDER;
                 break;
             case R.id.net_search:
-//                        navItemIndex = 3;
                 CURRENT_TAG = FragmentTags.TAG_SEARCH_INTERNER;
                 break;
             case R.id.unsorted_item:
-//                        navItemIndex = 1;
                 CURRENT_TAG = FragmentTags.TAG_SHOW_CARD;
                 Folder unsorted_folder = new Folder();
                 unsorted_folder.setName(getResources().getString(R.string.unsorted_item_string));
                 unsorted_folder.setID(-1);
                 startFragmentWithFolder(item, unsorted_folder);
-                break;
+                return true;
             case R.id.favourite_item:
-//                        navItemIndex = 1;
                 CURRENT_TAG = FragmentTags.TAG_SHOW_CARD;
                 Folder fav_folder = new Folder();
                 fav_folder.setName(getResources().getString(R.string.favourite_item_string));
                 fav_folder.setID(-2);
                 startFragmentWithFolder(item, fav_folder);
-                break;
+                return true;
             default:
                 folder = RealmController.with(MainActivity.this).getFolderById(item.getItemId());
-                //navItemIndex = 1;
                 CURRENT_TAG = FragmentTags.TAG_SHOW_CARD;
                 if (folder != null) {
                     startFragmentWithFolder(item, folder);
@@ -438,6 +314,83 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         loadFragment();
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onWordAdded() {
+        if (CURRENT_TAG==FragmentTags.TAG_LIST_FOLDER){
+            Fragment curFragment= getSupportFragmentManager().findFragmentByTag(FragmentTagsController.toString(CURRENT_TAG));
+            if (curFragment  instanceof ExpandableListFragment){
+                ((ExpandableListFragment) curFragment).onNewWordAdd();
+            }
+        }
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        Log.i("TAg","LOL");
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        setIconsToDefault();
+        MenuItem item=navigationView.getMenu().findItem(savedInstanceState.getInt("item"));
+        if (item!=null) item.setChecked(true);
+        toolBarTitle.setText(savedInstanceState.getString(BUNDLE_TOOLBAR_TITLE));
+        CURRENT_TAG = savedInstanceState.getParcelable(BUNDLE_CURRENT_TAG);
+
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //outState.putInt(BUNDLE_NAV_ITEM_INDEX, navItemIndex);
+        outState.putString(BUNDLE_TOOLBAR_TITLE, toolBarTitle.getText().toString());
+        outState.putParcelable(BUNDLE_CURRENT_TAG, CURRENT_TAG);
+        Menu menu=navigationView.getMenu();
+        MenuItem item;
+        int selectedItemId=-1;
+        SubMenu subMenu;
+        for (int i=0;i<menu.size();i++){
+            if (selectedItemId!=-1 ) break;;
+            item=menu.getItem(i);
+            if (item.getSubMenu()!=null){
+                subMenu=item.getSubMenu();
+                for (int j=0;j<subMenu.size();j++){
+                    if (subMenu.getItem(j).isChecked()){
+                        selectedItemId=subMenu.getItem(j).getItemId();
+                    }
+
+                }
+            }
+            if (item.isChecked()){
+                selectedItemId=item.getItemId();
+
+            }
+
+
+        }
+        outState.putInt("item",selectedItemId);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+//         Синхронизировать состояние переключения после того, как
+//         возникнет onRestoreInstanceState
+        actionBarDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Передать любые изменения конфигурации переключателям
+        // drawer'а
+        actionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
 
 }

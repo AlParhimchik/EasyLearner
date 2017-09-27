@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,7 @@ public class ShowCardWithWords extends Fragment {
     private ArrayList<Word> al;
     private CardWordAdapter arrayAdapter;
     private int i;
-    private int folderID = -1;
+    private int folderID;
     private Toolbar toolbar;
     public SwipeFlingAdapterView swipeCardView;
     public static final String TAG = "TAG";
@@ -47,9 +48,9 @@ public class ShowCardWithWords extends Fragment {
         RealmController realmController = RealmController.with(getActivity());
         if (getArguments() != null) {
             folderID = getArguments().getInt(BUNDLE_FOLDER_ID);
-            if (folderID == -1) {
+            if (folderID == -1) {// if clicked words with no folder
                 al=realmController.getWordsWithoutFolder();
-            } else if (folderID == -2) {
+            } else if (folderID == -2) { //if clecked favourite words
 
             } else {
                 Folder folder = realmController.getFolderById(folderID);

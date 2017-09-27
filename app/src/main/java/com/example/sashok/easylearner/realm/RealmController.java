@@ -132,13 +132,22 @@ public class RealmController  {
         });
     }
 
+    public void upDateFolder(final Folder folder){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealmOrUpdate(folder);
+            }
+        });
+    }
+
     public ArrayList<Word> getWordsWithoutFolder(){
 
         final ArrayList<Word> words=new ArrayList<>();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmResults<Word> result=realm.where(Word.class).equalTo("folderID",0).findAll();
+                RealmResults<Word> result=realm.where(Word.class).equalTo("folderID",-1).findAll();
                 for (Word word:result){
                     words.add(word);
                 }
@@ -162,13 +171,19 @@ public class RealmController  {
     }
 
     //xz ili tak
-    public void addWordsToFolder(final List<Word> words, final Folder folder){
+    public void addWordsToFolder(final RealmList<Word> words, final Folder folder){
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                Folder link=realm.copyToRealmOrUpdate(folder);
-                RealmList<Word> links=(RealmList<Word>)realm.copyToRealmOrUpdate(words);
-                link.setWords(links);
+                folder.setWords(words);
+            }
+        });
+    }
+    public void addWordToFolder(final Word word,final  Folder folder){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                folder.setWord(word);
             }
         });
     }
@@ -194,5 +209,17 @@ public class RealmController  {
             }
         });
         return  link;
+    }
+
+    public Word getWordById(final int id) {
+        final Word[] word = new Word[1];
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Word result=realm.where(Word.class).equalTo("ID",id).findFirst();
+                word[0] =result;
+            }
+        });
+        return word[0];
     }
 }

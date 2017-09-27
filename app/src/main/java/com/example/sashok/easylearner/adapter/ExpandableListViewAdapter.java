@@ -1,6 +1,7 @@
 package com.example.sashok.easylearner.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,11 +76,24 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.folder_item_expandable_list_view, null);
 
         }
+//        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View v) {
+//                return false;
+//            }
+//        });
+//        convertView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.i("TAG","lol");
+//
+//            }
+//        });
         indicator=(ImageView)convertView.findViewById(R.id.toggleIcon);
         if (isExpanded) {
             indicator.setImageResource(R.drawable.ic_action_collapse);
         }else{
-            indicator.setImageResource(R.drawable.expanse_collapse_icon);
+            indicator.setImageResource(R.drawable.ic_action_expanse);
         }
         TextView lblListHeader = (TextView) convertView
                 .findViewById(R.id.headingTxt);
