@@ -9,10 +9,11 @@
     >
         <TextView
             android:id="@+id/titleTxt"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/primary_text"
             android:textSize="16sp"
+            android:layout_marginLeft="30dp"
             android:typeface="sans"
             android:textStyle="normal"/>
 </LinearLayout>

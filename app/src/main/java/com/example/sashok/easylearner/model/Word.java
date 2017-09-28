@@ -46,6 +46,10 @@ public class Word extends RealmObject {
     private int ID;
 
 
+    public Word(){
+        translation=new RealmList<>();
+    }
+
     public int getID() {
         return ID;
     }
@@ -60,7 +64,14 @@ public class Word extends RealmObject {
     }
 
     public void setTranslation(RealmList<RealmString> translation) {
-        this.translation = translation;
+        for (RealmString string:translation)
+        this.translation.add(string);
+    }
+
+    public void setTranslation(RealmString string){
+        if (translation==null) translation=new RealmList<>();
+
+        if (!this.translation.contains(string)) this.translation.add(string);
     }
 
     public String getEnWord() {
@@ -95,4 +106,5 @@ public class Word extends RealmObject {
     public void setCountOfShow(int countOfShow) {
         this.countOfShow = countOfShow;
     }
+
 }

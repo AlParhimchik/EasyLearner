@@ -13,7 +13,16 @@
     <string name="chooseWords">Выберите слова:</string>
     <string name="AddWord">Добавить слово</string>
     <string name="Error_no_Words_In_Folder">Нету слов в данной теме </string>
-    <string name="Error_no_Unfoldered_Words">Нету слов без темы , нельзя создать тему</string>
+    <string name="Error_no_Unfoldered_Words">Нету слов без темы , добавьте их в главном окне</string>
     <string name="unsorted_item_string">Неотсортированые</string>
     <string name="favourite_item_string">Любимые</string>
+    <string name="action_delete">Удалить</string>
+    <string name="add_en_word">Введите слово</string>
+    <string name="add_translate">Введие перевод</string>
+    <string name="choose_folder">Выберите тему</string>
+    <string name="cancel">Отменить</string>
+    <string name="change_folder">изменить</string>
+    <string name="default_folder">Не выбрана</string>
+    <string name="change_word">Изменить слово</string>
+
 </resources>

@@ -3,8 +3,10 @@ package com.example.sashok.easylearner.realm;
 import android.app.Activity;
 import android.app.Application;
 import android.app.Fragment;
+import android.util.Log;
 
 import com.example.sashok.easylearner.model.Folder;
+import com.example.sashok.easylearner.model.RealmString;
 import com.example.sashok.easylearner.model.Word;
 
 import java.util.ArrayList;
@@ -75,6 +77,14 @@ public class RealmController  {
         });
 
     }
+    public void updateWord(final Word word){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealmOrUpdate(word);
+            }
+        });
+    }
     public  void deleteWord(final Word word){
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -132,13 +142,22 @@ public class RealmController  {
         });
     }
 
+    public void upDateFolder(final Folder folder){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealmOrUpdate(folder);
+            }
+        });
+    }
+
     public ArrayList<Word> getWordsWithoutFolder(){
 
         final ArrayList<Word> words=new ArrayList<>();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmResults<Word> result=realm.where(Word.class).equalTo("folderID",0).findAll();
+                RealmResults<Word> result=realm.where(Word.class).equalTo("folderID",-1).findAll();
                 for (Word word:result){
                     words.add(word);
                 }
@@ -162,13 +181,19 @@ public class RealmController  {
     }
 
     //xz ili tak
-    public void addWordsToFolder(final List<Word> words, final Folder folder){
+    public void addWordsToFolder(final RealmList<Word> words, final Folder folder){
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                Folder link=realm.copyToRealmOrUpdate(folder);
-                RealmList<Word> links=(RealmList<Word>)realm.copyToRealmOrUpdate(words);
-                link.setWords(links);
+                folder.setWords(words);
+            }
+        });
+    }
+    public void addWordToFolder(final Word word,final  Folder folder){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                folder.setWord(word);
             }
         });
     }
@@ -178,6 +203,28 @@ public class RealmController  {
             @Override
             public void execute(Realm realm) {
                 realm.where(Folder.class).contains("id",String.valueOf(folder.getID())).findFirst().deleteFromRealm();
+            }
+        });
+    }
+
+    public void deleteAllWordTranslation(final Word word) {
+       realm.executeTransaction(new Realm.Transaction() {
+           @Override
+           public void execute(Realm realm) {
+               int size=word.getTranslation().size();
+              for(int i=0;i<size;i++){
+                  word.getTranslation().remove(0);
+              }
+
+           }
+       });
+    }
+
+    public void changeFolderID(final Word word, final int new_folder_id){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                word.setFolderID(new_folder_id);
             }
         });
     }
@@ -194,5 +241,27 @@ public class RealmController  {
             }
         });
         return  link;
+    }
+
+    public Word getWordById(final int id) {
+        final Word[] word = new Word[1];
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Word result=realm.where(Word.class).equalTo("ID",id).findFirst();
+                word[0] =result;
+            }
+        });
+        return word[0];
+    }
+
+    public void deleteWordFromFolder(final Folder folder_of_word_on_view, final Word word) {
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                folder_of_word_on_view.getWords().remove(word);
+            }
+        });
     }
 }
