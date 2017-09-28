@@ -1,4 +1,4 @@
-package com.example.sashok.easylearner.adapter;
+package com.example.sashok.easylearner.app;
 
 import android.content.Context;
 import android.support.v7.widget.CardView;

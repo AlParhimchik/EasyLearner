@@ -86,21 +86,21 @@ public class AddWordDialogFragment extends AlertDialog implements View.OnClickLi
         choose_folder_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builderSingle = new AlertDialog.Builder(activity);
+                Builder builderSingle = new Builder(activity);
                 builderSingle.setTitle(R.string.change_folder);
                 final RealmController realmController = RealmController.with(activity);
                 List<Folder> folders = realmController.getFolders();
                 final ArrayAdapter<Folder> arrayAdapter = new ArrayAdapter<Folder>(activity, android.R.layout.select_dialog_item);
                 arrayAdapter.addAll(folders);
 
-                builderSingle.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                builderSingle.setNegativeButton(R.string.cancel, new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 });
 
-                builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                builderSingle.setAdapter(arrayAdapter, new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (folder_of_word_on_view != null && folder_of_word_on_view != arrayAdapter.getItem(which)) {

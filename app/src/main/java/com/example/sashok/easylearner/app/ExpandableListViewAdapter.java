@@ -1,4 +1,4 @@
-package com.example.sashok.easylearner.adapter;
+package com.example.sashok.easylearner.app;
 
 import android.app.Activity;
 import android.content.Context;

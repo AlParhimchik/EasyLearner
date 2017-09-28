@@ -13,7 +13,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -21,17 +20,19 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.sashok.easylearner.R;
+import com.example.sashok.easylearner.fragment.AbsFragment;
 import com.example.sashok.easylearner.fragment.AddFolderFragment;
 import com.example.sashok.easylearner.fragment.AddWordDialogFragment;
 import com.example.sashok.easylearner.fragment.ExpandableListFragment;
 import com.example.sashok.easylearner.fragment.SearchInNetFragment;
-import com.example.sashok.easylearner.fragment.ShowCardWithWords;
+import com.example.sashok.easylearner.fragment.ShowCardWithWordsFragment;
+import com.example.sashok.easylearner.helper.FragmentTagsController;
 import com.example.sashok.easylearner.listener.FolderAddedListener;
 import com.example.sashok.easylearner.listener.WordChangedListener;
 import com.example.sashok.easylearner.model.Folder;
 import com.example.sashok.easylearner.model.FragmentTags;
-import com.example.sashok.easylearner.model.FragmentTagsController;
 import com.example.sashok.easylearner.realm.RealmController;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.List;
 
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
     private Toolbar toolbar;
     private NavigationView navigationView;
     private TextView toolBarTitle;
+    MaterialSearchView searchView;
     //used when user addes new folder
     private FolderAddedListener folderAddedListener;
 
@@ -66,14 +68,14 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         setSupportActionBar(toolbar);
         setListeners();
         if (savedInstanceState == null) {
-            CURRENT_TAG = FragmentTags.TAG_LIST_FOLDER;
-            loadFragment(); // if app startes load home fragment
+            CURRENT_TAG = FragmentTags.TAG_SHOW_CARD;
+            replaceFragment(); // if app startes load home fragment
         }
         toggleFab();
 
     }
 
-    public void loadFragment() {
+    public void replaceFragment() {
         // if user select the current navigation menu again, don't do anything
         // just close the navigation drawer
         if (getSupportFragmentManager().findFragmentByTag(FragmentTagsController.toString(CURRENT_TAG)) != null) {
@@ -92,15 +94,32 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
 
     }
 
+    public void addFragment() {
+        if (getSupportFragmentManager().findFragmentByTag(FragmentTagsController.toString(CURRENT_TAG)) != null) {
+            drawerLayout.closeDrawers();
+            toggleFab();
+            return;
+        }
+        Fragment fragment = getFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
+//                android.R.anim.slide_out_right);
+        fragmentTransaction.add(R.id.frame_layout, fragment, FragmentTagsController.toString(CURRENT_TAG));
+        //fragmentTransaction.addToBackStack(CURRENT_TAG.name());
+        fragmentTransaction.commit();
+        toggleFab();
+        drawerLayout.closeDrawers();
+    }
+
     private Fragment getFragment() {
         switch (CURRENT_TAG) {
             case TAG_LIST_FOLDER:
                 ExpandableListFragment listFolderFragment = new ExpandableListFragment();
-                toolBarTitle.setText(R.string.app_name);
+//                toolBarTitle.setText(R.string.app_name);
                 return listFolderFragment;
             case TAG_SHOW_CARD:
 
-                ShowCardWithWords cardFragment = new ShowCardWithWords();
+                ShowCardWithWordsFragment cardFragment = new ShowCardWithWordsFragment();
                 toolBarTitle.setText(R.string.app_name);
                 return cardFragment;
             case TAG_ADD_FOLDER:
@@ -113,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
                 toolBarTitle.setText(R.string.search_in_net);
                 return searchFragment;
             default:
-                return new ShowCardWithWords();
+                return new ShowCardWithWordsFragment();
         }
 
     }
@@ -138,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
             }
         };
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        searchView = (MaterialSearchView) findViewById(R.id.search_view);
     }
 
     public void setListeners() {
@@ -154,6 +174,57 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
                 dialogFragment.show();
             }
         });
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (getFragment() instanceof ExpandableListFragment) {
+                    ExpandableListFragment fragment = (ExpandableListFragment) getFragment();
+                    fragment.filter(query);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Fragment fragment = getSupportFragmentManager().findFragmentByTag(FragmentTagsController.toString(CURRENT_TAG));
+
+                if (fragment instanceof ExpandableListFragment) {
+                    ExpandableListFragment fragment1 = (ExpandableListFragment) fragment;
+                    fragment1.filter(newText);
+                }
+                return true;
+            }
+        });
+        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+            @Override
+            public void onSearchViewShown() {
+                setDrawerState(false);
+                CURRENT_TAG = FragmentTags.TAG_LIST_FOLDER;
+                addFragment();
+            }
+
+            @Override
+            public void onSearchViewClosed() {
+                setDrawerState(true);
+                if (CURRENT_TAG == FragmentTags.TAG_LIST_FOLDER)
+                    onBackPressed();
+            }
+        });
+    }
+
+    public void setDrawerState(boolean isEnabled) {
+        if (isEnabled) {
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            actionBarDrawerToggle.onDrawerStateChanged(DrawerLayout.LOCK_MODE_UNLOCKED);
+            actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
+            actionBarDrawerToggle.syncState();
+
+        } else {
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            actionBarDrawerToggle.onDrawerStateChanged(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
+            actionBarDrawerToggle.syncState();
+        }
     }
 
     public void startFragmentWithFolder(MenuItem item, Folder folder) {
@@ -161,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         item.setChecked(true);
         item.setIcon(R.drawable.ic_action_open_folder);
         toolBarTitle.setText(folder.getName());
-        Fragment fragment = ShowCardWithWords.newInstance(folder.getID());
+        Fragment fragment = ShowCardWithWordsFragment.newInstance(folder.getID());
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
                 android.R.anim.slide_out_right);
@@ -192,16 +263,35 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            setIconsToDefault();
-            if (CURRENT_TAG != FragmentTags.TAG_LIST_FOLDER) {
-//            navItemIndex = 0;
-                CURRENT_TAG = FragmentTags.TAG_LIST_FOLDER;
-                loadFragment();
+            if (CURRENT_TAG == FragmentTags.TAG_LIST_FOLDER) {
+                List<Fragment> fragments = getSupportFragmentManager().getFragments();
+                Fragment cur_fragment = fragments.get(0);
+                Fragment last_fragment = fragments.get(1);
+                for (Fragment fragment : fragments) {
+                    if (FragmentTagsController.fromString(fragment.getTag()) == FragmentTags.TAG_LIST_FOLDER)
+                        cur_fragment = fragment;
+                    else {
+                        last_fragment = fragment;
+                    }
+                }
+                getSupportFragmentManager().beginTransaction().remove(cur_fragment).commit();
+                FragmentTags last_tag = FragmentTagsController.fromString(last_fragment.getTag());
+                if (last_tag != null) CURRENT_TAG = last_tag;
+                else
+                    CURRENT_TAG = FragmentTags.TAG_SHOW_CARD;
+                if (searchView.isSearchOpen()) searchView.closeSearch();
+                toggleFab();
                 return;
+            }
+            setIconsToDefault();
+            if (CURRENT_TAG != FragmentTags.TAG_SHOW_CARD) {
+//            navItemIndex = 0;
+                CURRENT_TAG = FragmentTags.TAG_SHOW_CARD;
+                replaceFragment();
+
             } else {
                 super.onBackPressed();
             }
@@ -210,7 +300,7 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
     }
 
     public void toggleFab() {
-        if (CURRENT_TAG == FragmentTags.TAG_LIST_FOLDER) {
+        if (CURRENT_TAG == FragmentTags.TAG_SHOW_CARD) {
             fab.show();
         } else {
             fab.hide();
@@ -221,28 +311,27 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.search_action);
+        searchView.setMenuItem(menuItem);
         return true;
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         //implement search here
-        if (id == R.id.search) {
-
-            return true;
-        }
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 
     @Override
     public void onFolderAddedListener(Fragment fragment) {
         //navItemIndex = 0;
-        CURRENT_TAG = FragmentTags.TAG_LIST_FOLDER;
-        loadFragment();
+        CURRENT_TAG = FragmentTags.TAG_SHOW_CARD;
+        replaceFragment();
         showMostViewsFolders();
     }
 
@@ -261,6 +350,38 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
             MenuItem menuItem = m.getItem(i);
             if (menuItem.isChecked()) menuItem.setChecked(false);
         }
+    }
+
+    public Folder getSelectedItem() {
+        Menu m = navigationView.getMenu();
+        MenuItem item = m.getItem(0);
+        MenuItem selected_item = null;
+        SubMenu subMenu = item.getSubMenu();
+        Folder folder ;
+        for (int i = 0; i < subMenu.size(); i++) {
+            MenuItem menuItem = subMenu.getItem(i);
+            if (menuItem.isChecked()) {
+                selected_item = menuItem;
+
+            }
+        }
+        for (int i = 1; i < m.size(); i++) {
+            MenuItem menuItem = m.getItem(i);
+            if (menuItem.isChecked()) {
+                selected_item = menuItem;
+
+            }
+        }
+        if (selected_item != null) {
+            RealmController controller = RealmController.with(this);
+            folder = controller.getFolderById(selected_item.getItemId());
+            if (folder == null) {
+                folder = new Folder();
+                folder.setName(selected_item.getTitle().toString());
+                folder.setID(selected_item.getItemId());
+            }
+            return folder;
+        } else return null;
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -300,36 +421,29 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         }
         item.setChecked(true);
 
-        loadFragment();
+        replaceFragment();
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
     public void onWordAdded() {
-        if (CURRENT_TAG == FragmentTags.TAG_LIST_FOLDER) {
-            Fragment curFragment = getSupportFragmentManager().findFragmentByTag(FragmentTagsController.toString(CURRENT_TAG));
-            if (curFragment instanceof ExpandableListFragment) {
-                ((ExpandableListFragment) curFragment).onNewWordAdd();
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        for (Fragment fragment : fragments) {
+            if (fragment instanceof AbsFragment) {
+                ((AbsFragment) fragment).OnDataSetChanged();
             }
         }
     }
 
     @Override
     public void onWordDeleteFolder() {
-        if (CURRENT_TAG == FragmentTags.TAG_LIST_FOLDER) {
-            Fragment curFragment = getSupportFragmentManager().findFragmentByTag(FragmentTagsController.toString(CURRENT_TAG));
-            if (curFragment instanceof ExpandableListFragment) {
-                ((ExpandableListFragment) curFragment).onWordDeletedFolder();
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        for (Fragment fragment : fragments) {
+            if (fragment instanceof AbsFragment) {
+                ((AbsFragment) fragment).OnDataSetChanged();
             }
         }
-    }
-
-    @Override
-    public void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        Log.i("TAg", "LOL");
-
     }
 
     @Override
@@ -356,7 +470,6 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         SubMenu subMenu;
         for (int i = 0; i < menu.size(); i++) {
             if (selectedItemId != -1) break;
-            ;
             item = menu.getItem(i);
             if (item.getSubMenu() != null) {
                 subMenu = item.getSubMenu();
@@ -392,5 +505,4 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         // drawer'а
         actionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
-
 }

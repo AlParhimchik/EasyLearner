@@ -2,9 +2,7 @@ package com.example.sashok.easylearner.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +22,7 @@ import java.util.ArrayList;
  * Created by sashok on 24.9.17.
  */
 
-public class ShowCardWithWords extends Fragment {
+public class ShowCardWithWordsFragment extends AbsFragment {
     private ArrayList<Word> al;
     private CardWordAdapter arrayAdapter;
     private int i;
@@ -35,21 +33,22 @@ public class ShowCardWithWords extends Fragment {
     public static final String BUNDLE_FOLDER_ID = "folder_id";
     private TextView textError;
     private LinearLayout mainLayout;
+    RealmController realmController;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        realmController = RealmController.with(getActivity());
+        al = new ArrayList<>();
         setDataList();
-        arrayAdapter = new CardWordAdapter(getActivity(), al);
     }
 
     private void setDataList() {
-        al = new ArrayList<>();
-        RealmController realmController = RealmController.with(getActivity());
+        al.clear();
         if (getArguments() != null) {
             folderID = getArguments().getInt(BUNDLE_FOLDER_ID);
             if (folderID == -1) {// if clicked words with no folder
-                al=realmController.getWordsWithoutFolder();
+                al = realmController.getWordsWithoutFolder();
             } else if (folderID == -2) { //if clecked favourite words
 
             } else {
@@ -65,22 +64,15 @@ public class ShowCardWithWords extends Fragment {
 
     }
 
-    public ShowCardWithWords() {
+    public ShowCardWithWordsFragment() {
 
     }
 
-    public void noAvailableWords() {
-        textError.setText(R.string.Error_no_Words_In_Folder);
-        textError.setVisibility(View.VISIBLE);
-
-
-    }
-
-    public static ShowCardWithWords newInstance(int folder_id) {
+    public static ShowCardWithWordsFragment newInstance(int folder_id) {
 
         Bundle args = new Bundle();
         args.putInt(BUNDLE_FOLDER_ID, folder_id);
-        ShowCardWithWords fragment = new ShowCardWithWords();
+        ShowCardWithWordsFragment fragment = new ShowCardWithWordsFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -92,52 +84,55 @@ public class ShowCardWithWords extends Fragment {
         View view = inflater.inflate(R.layout.show_card_fragment, container, false);
         textError = (TextView) view.findViewById(R.id.error_text_no_words);
         mainLayout = (LinearLayout) view.findViewById(R.id.add_folder_layout);
+        swipeCardView = (SwipeFlingAdapterView) view.findViewById(R.id.card_view);
 
-        if (al.size() == 0) noAvailableWords();
-        else {
-            textError.setVisibility(View.INVISIBLE);
-            swipeCardView = (SwipeFlingAdapterView) view.findViewById(R.id.card_view);
-            swipeCardView.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClicked(int itemPosition, Object dataObject) {
-                    arrayAdapter.onCardClicked();
-                }
-            });
-            swipeCardView.setAdapter(arrayAdapter);
-            swipeCardView.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
-                @Override
-                public void removeFirstObjectInAdapter() {
-                    al.remove(0);
-                    //card_progress.setVisibility(View.INVISIBLE);
-                    arrayAdapter.notifyDataSetChanged();
-
-                }
+        setVisibility();
 
 
-                @Override
-                public void onLeftCardExit(Object dataObject) {
-                    //Do something on the left!
-                    //You also have access to the original object.
-                    //If you want to use it just cast it (String) dataObject
-                    arrayAdapter.onDeleteCard();
-                }
+        swipeCardView.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClicked(int itemPosition, Object dataObject) {
+                arrayAdapter.onCardClicked();
+            }
+        });
 
-                @Override
-                public void onRightCardExit(Object dataObject) {
-                    arrayAdapter.onDeleteCard();
-                }
+        arrayAdapter = new CardWordAdapter(getActivity(), al);
 
-                @Override
-                public void onAdapterAboutToEmpty(int itemsInAdapter) {
-                    Word card = new Word();
+        swipeCardView.setAdapter(arrayAdapter);
+        swipeCardView.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
+            @Override
+            public void removeFirstObjectInAdapter() {
+                al.remove(0);
+                //card_progress.setVisibility(View.INVISIBLE);
+                arrayAdapter.notifyDataSetChanged();
+
+            }
+
+
+            @Override
+            public void onLeftCardExit(Object dataObject) {
+                //Do something on the left!
+                //You also have access to the original object.
+                //If you want to use it just cast it (String) dataObject
+                arrayAdapter.onDeleteCard();
+            }
+
+            @Override
+            public void onRightCardExit(Object dataObject) {
+                arrayAdapter.onDeleteCard();
+            }
+
+            @Override
+            public void onAdapterAboutToEmpty(int itemsInAdapter) {
+                Word card = new Word();
 //                card.name = "Card1";
 //                card.imageId = R.drawable.quila2;
-                    al.add(card);
-                    arrayAdapter.notifyDataSetChanged();
-                }
+                al.add(card);
+                arrayAdapter.notifyDataSetChanged();
+            }
 
-                @Override
-                public void onScroll(float v) {
+            @Override
+            public void onScroll(float v) {
 //                arrayAdapter.setVisibility(v);
 //                if  (card_progress.getVisibility()==View.INVISIBLE)
 //                    card_progress.setVisibility(View.VISIBLE);
@@ -147,12 +142,30 @@ public class ShowCardWithWords extends Fragment {
 //                if (v==0) card_progress.setVisibility(View.INVISIBLE);
 //                else
 //                    onScrollLeft(-v); //go from right
-                }
-            });
-        }
+            }
+        });
 
 
         return view;
 
+    }
+
+
+    @Override
+    public void OnDataSetChanged() {
+        setDataList();
+        arrayAdapter.notifyDataSetChanged();
+        setVisibility();
+    }
+
+    private void setVisibility() {
+        if (al.size() == 0) {
+            textError.setText(R.string.Error_no_Words_In_Folder);
+            textError.setVisibility(View.VISIBLE);
+            swipeCardView.setVisibility(View.INVISIBLE);
+        } else {
+            textError.setVisibility(View.INVISIBLE);
+            swipeCardView.setVisibility(View.VISIBLE);
+        }
     }
 }
