@@ -119,15 +119,6 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.words_item_expendable_list_view, null);
         }
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AddWordDialogFragment dialogFragment = new AddWordDialogFragment(_context, (MainActivity) _context, filteredListFolders.get(groupPosition).getWords().get(childPosition));
-                dialogFragment.getWindow().getAttributes().windowAnimations = R.style.RegistrationDialogAnimation;
-                dialogFragment.setTitle(R.string.change_word);
-                dialogFragment.show();
-            }
-        });
         TextView lblListHeader = (TextView) convertView
                 .findViewById(R.id.titleTxt);
         lblListHeader.setText(headerTitle);
@@ -135,16 +126,18 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         return convertView;
     }
 
+    public void showWordDialog(int groupPosition,int childPosition){
+
+        AddWordDialogFragment dialogFragment = new AddWordDialogFragment(_context, (MainActivity) _context, filteredListFolders.get(groupPosition).getWords().get(childPosition));
+        dialogFragment.getWindow().getAttributes().windowAnimations = R.style.RegistrationDialogAnimation;
+        dialogFragment.setTitle(R.string.change_word);
+        dialogFragment.show();
+
+    }
+
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
-    }
-
-    public void onCollapseFolder(int folderPos) {
-
-    }
-
-    public void onExpanseFolder(int folderPos) {
     }
 
     @Override
@@ -163,8 +156,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
                 if (folder.getName().contains(charText)) addFolderToFilteredList(folder, null);
                 for (Word word : folder.getWords()) {
                     if (word.getEnWord().contains(charText)) {
-                        addFolderToFilteredList(folder, null);
-                        folder.setWord(word);
+                        addFolderToFilteredList(folder, word);
                         break;
                     }
                     for (RealmString string : word.getTranslation()) {

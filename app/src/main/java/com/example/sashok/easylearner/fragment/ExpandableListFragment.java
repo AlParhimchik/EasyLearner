@@ -60,29 +60,14 @@ public class ExpandableListFragment extends AbsFragment {
                     parent.collapseGroup(groupPosition);
                 else
                     parent.expandGroup(groupPosition, true);
-                //listAdapterListener.onFolderClicked(groupPosition);
                 return true;
             }
         });
         mExpandableView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                //listAdapterListener.onWordClicked(childPosition);
+                mAdapter.showWordDialog(groupPosition,childPosition);
                 return true;
-            }
-        });
-        mExpandableView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.i("lol", "1");
-                return true;
-            }
-        });
-        mExpandableView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Log.i("lol", "1");
-                return false;
             }
         });
         return view;
