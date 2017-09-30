@@ -56,7 +56,7 @@ public class RealmController  {
         return instance;
     }
 
-    public Realm getRealm() {
+    public  Realm getRealm() {
 
         return realm;
     }

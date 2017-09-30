@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Card">
+        <attr name="card_background" format="integer"></attr>
+        <attr name="pos_button_sourse" format="reference"></attr>
+        <attr name="negative_button_sourse" format="reference"></attr>
+        <attr name="primary_color" format="integer"></attr>
+        <attr name="back_color" format="integer"></attr>
+
+    </declare-styleable>
+</resources>

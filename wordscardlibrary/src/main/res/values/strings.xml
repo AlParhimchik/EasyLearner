@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">WordCards</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="animal">Животные</string>
+    <string name="flowers">Растения</string>
+    <string name="new_topic">Новая тема</string>
+    <string name="english_word">Введите слово</string>
+    <string name="russian_word">Введите перевод</string>
+    <string name="word">Слово</string>
+    <string name="add_word">Добавить</string>
+    <string name="transcription">Введите траскрипцию</string>
+    <string name="cancel">Отмена</string>
+</resources>

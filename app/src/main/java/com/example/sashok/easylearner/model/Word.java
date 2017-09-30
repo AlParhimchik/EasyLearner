@@ -3,6 +3,8 @@ package com.example.sashok.easylearner.model;
 import android.support.v7.widget.CardView;
 import android.widget.TextView;
 
+import com.example.wordscardlibrary.model.WordInterface;
+
 import java.util.Date;
 
 import io.realm.RealmList;
@@ -14,7 +16,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by sashok on 23.9.17.
  */
 
-public class Word extends RealmObject {
+public class Word extends RealmObject  implements WordInterface{
     private RealmList<RealmString> translation;
     private String enWord;
     private Boolean favourite;
@@ -34,6 +36,17 @@ public class Word extends RealmObject {
     public void setCardView(CardView cardView) {
         this.cardView = cardView;
     }
+
+    @Override
+    public String getTranscription() {
+        return transcription;
+    }
+
+    public void setTranscription(String transcription) {
+        this.transcription = transcription;
+    }
+
+    private String transcription;
 
     private int folderID;
     private Date date;
@@ -58,6 +71,7 @@ public class Word extends RealmObject {
         this.ID = ID;
     }
 
+    @Override
     public RealmList<RealmString> getTranslation() {
 
         return translation;
@@ -74,6 +88,7 @@ public class Word extends RealmObject {
         if (!this.translation.contains(string)) this.translation.add(string);
     }
 
+    @Override
     public String getEnWord() {
         return enWord;
     }

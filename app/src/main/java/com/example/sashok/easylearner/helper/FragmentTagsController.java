@@ -8,18 +8,19 @@ import com.example.sashok.easylearner.model.FragmentTags;
 
 public class FragmentTagsController {
 
-    public static  String  TAG_LIST_FOLDER="TAG_LIST_FOLDER";
+    public static String TAG_LIST_FOLDER = "TAG_LIST_FOLDER";
+    public static String TAG_DEFAULT_FRAGMENT = "TAG_DEFAULT";
+    public static String TAG_SHOW_CARD = "TAG_SHOW_CARD";
+    public static String TAG_ADD_FOLDER = "TAG_ADD_FOLDER";
+    public static String TAG_SEARCH_INTERNER = "TAG_SEARCH_INTERNER";
 
-    public static  String  TAG_SHOW_CARD="TAG_SHOW_CARD";
-    public static  String  TAG_ADD_FOLDER="TAG_ADD_FOLDER";
-    public static  String  TAG_SEARCH_INTERNER="TAG_SEARCH_INTERNER" ;
-    public static String toString(FragmentTags tag){
-       return tag.name();
+    public static String toString(FragmentTags tag) {
+        return tag.name();
     }
 
-    public static  FragmentTags fromString(String tag){
-        for (int i=0;i<FragmentTags.values().length;i++){
-            if (tag==FragmentTags.values()[i].name()){
+    public static FragmentTags fromString(String tag) {
+        for (int i = 0; i < FragmentTags.values().length; i++) {
+            if (tag == FragmentTags.values()[i].name()) {
                 return FragmentTags.values()[i];
             }
         }

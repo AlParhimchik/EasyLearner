@@ -1,19 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:id="@+id/frame"
     android:layout_height="match_parent">
-    <com.example.sashok.easylearner.lib.SwipeFlingAdapterView
-
-        android:id="@+id/card_view"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:rotation_degrees="15"
-        app:max_visible="1"
-        app:min_adapter_stack="1" />
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+        <com.example.wordscardlibrary.view.Card
+            android:id="@+id/card_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            app:primary_color="@color/primary_text"
+            app:back_color="@color/secondary_text"
+            app:card_background="@color/colorPrimary"
+            android:visibility="visible"
+            android:layout_margin="16dp"
+
+            app:cardCornerRadius="8dp">
+
+        </com.example.wordscardlibrary.view.Card>
+        <!--<LinearLayout-->
+            <!--android:layout_below="@id/card_view"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="0dp">-->
+            <!--<RelativeLayout-->
+                <!--android:layout_marginRight="20dp"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1">-->
+                <!--<ImageView-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:minHeight="64dp"-->
+                    <!--android:minWidth="64dp"-->
+                    <!--android:scaleType="fitCenter"-->
+                    <!--android:layout_alignParentRight= "true"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:src="@drawable/success_64dp"/>-->
+            <!--</RelativeLayout>-->
+            <!--<RelativeLayout-->
+                <!--android:layout_marginLeft="20dp"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_weight="1">-->
+                <!--<ImageView-->
+                    <!--android:layout_alignParentLeft="true"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:minHeight="64dp"-->
+                    <!--android:minWidth="64dp"-->
+                    <!--android:scaleType="fitCenter"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:src="@drawable/error"/>-->
+            <!--</RelativeLayout>-->
+        <!--</LinearLayout>-->
+    </LinearLayout>
     <include
         layout="@layout/error_view"></include>
-</FrameLayout>
+</RelativeLayout>
 

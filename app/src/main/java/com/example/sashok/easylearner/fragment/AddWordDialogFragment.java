@@ -88,8 +88,7 @@ public class AddWordDialogFragment extends AlertDialog implements View.OnClickLi
             public void onClick(View v) {
                 Builder builderSingle = new Builder(activity);
                 builderSingle.setTitle(R.string.change_folder);
-                final RealmController realmController = RealmController.with(activity);
-                List<Folder> folders = realmController.getFolders();
+                List<Folder> folders = RealmController.with(activity).getFolders();
                 final ArrayAdapter<Folder> arrayAdapter = new ArrayAdapter<Folder>(activity, android.R.layout.select_dialog_item);
                 arrayAdapter.addAll(folders);
 
@@ -155,7 +154,7 @@ public class AddWordDialogFragment extends AlertDialog implements View.OnClickLi
             addTranslationOnView(translate.string_name);
         }
         folder_of_word_on_view = realmController.getFolderById(word_on_view.getFolderID());
-        folder_name.setText(folder_of_word_on_view.getName());
+        if (folder_of_word_on_view!=null ) folder_name.setText(folder_of_word_on_view.getName());
 
 
     }

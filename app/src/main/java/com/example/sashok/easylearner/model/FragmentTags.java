@@ -11,8 +11,8 @@ public enum FragmentTags  implements Parcelable{
     TAG_LIST_FOLDER,
    TAG_SHOW_CARD,
     TAG_ADD_FOLDER ,
-    TAG_SEARCH_INTERNER;
-
+    TAG_SEARCH_INTERNER,
+    TAG_DEFAULT_FRAGMENT;
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(ordinal());

@@ -13,6 +13,10 @@ import io.realm.RealmObject;
 public class RealmString extends RealmObject {
     public String string_name;
 
+    @Override
+    public String toString() {
+        return string_name;
+    }
 }
 
 

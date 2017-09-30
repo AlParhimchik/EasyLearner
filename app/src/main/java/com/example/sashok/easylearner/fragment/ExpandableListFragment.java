@@ -16,6 +16,7 @@ import com.example.sashok.easylearner.R;
 import com.example.sashok.easylearner.adapter.ExpandableListViewAdapter;
 import com.example.sashok.easylearner.listener.ExpandableListAdapterListener;
 import com.example.sashok.easylearner.model.Folder;
+import com.example.sashok.easylearner.model.Word;
 import com.example.sashok.easylearner.realm.RealmController;
 
 import java.util.List;
@@ -48,6 +49,14 @@ public class ExpandableListFragment extends AbsFragment {
         mExpandableView = (ExpandableListView) view.findViewById(R.id.expandableView);
         realmController = RealmController.with(getActivity());
         List<Folder> folders = realmController.getFolders();
+        Folder folder=new Folder();
+        folder.setName("Без темы");
+        folder.setID(-1);
+        List<Word> wordsWithoutFolder=realmController.getWordsWithoutFolder();
+        for (Word word:wordsWithoutFolder){
+            folder.setWord(word);
+        }
+        folders.add(folder);
         mAdapter = new ExpandableListViewAdapter(getActivity(), folders);
         mExpandableView.setAdapter(mAdapter);
         mExpandableView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
