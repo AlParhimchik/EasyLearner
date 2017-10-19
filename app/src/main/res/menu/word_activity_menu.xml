@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+<item android:id="@+id/sort"
+      android:title="sort"
+      app:showAsAction="always"
+    android:icon="@drawable/ic_sort_action_white">
+
+</item>
+    <item android:id="@+id/edit"
+          android:title="edit"
+          app:showAsAction="always"
+          android:icon="@drawable/ic_edit_action_white">
+
+    </item>
+    <item android:id="@+id/search"
+          android:title="search"
+          app:showAsAction="always"
+          android:icon="@drawable/ic_search_action_white">
+
+    </item>
+</menu>

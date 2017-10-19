@@ -3,7 +3,7 @@ package com.example.sashok.easylearner.adapter;
 import android.content.Context;
 
 import com.example.sashok.easylearner.model.Word;
-import com.example.wordscardlibrary.adapter.WordAdapter;
+import com.example.swipecardlibrary.adapter.WordAdapter;
 
 import java.util.List;
 
@@ -16,7 +16,9 @@ public class CardWithWordsAdapter extends WordAdapter<Word> {
     private  List<Word> words;
     @Override
     public Word getItem(int position) {
+        if (position<words.size())
         return words.get(position);
+        else return null;
     }
 
     @Override

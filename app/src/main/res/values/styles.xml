@@ -10,6 +10,13 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/colorPrimaryDark</item>
+        <item name="actionModeStyle">@style/AppTheme.ActionMode</item>
+    </style>
+
+    <style name="AppTheme.ActionMode" parent="Base.Widget.AppCompat.ActionMode">
+        <item name="android:minHeight">?android:attr/actionBarSize</item>
 
     </style>
 

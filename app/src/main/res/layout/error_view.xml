@@ -12,7 +12,7 @@
         android:layout_gravity="center"
         android:layout_margin="20dp"
         android:gravity="center"
-         android:textColor="@color/colorPrimary"
+         android:textColor="@color/white"
         android:textSize="30dp"
         android:textStyle="italic"
         android:visibility="invisible" />

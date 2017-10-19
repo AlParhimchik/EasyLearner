@@ -14,7 +14,7 @@ import com.example.sashok.easylearner.adapter.CardWithWordsAdapter;
 import com.example.sashok.easylearner.model.Folder;
 import com.example.sashok.easylearner.model.Word;
 import com.example.sashok.easylearner.realm.RealmController;
-import com.example.wordscardlibrary.view.Card;
+import com.example.swipecardlibrary.view.Card;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class ShowCardWithWordsFragment extends AbsFragment {
     private int i;
     private int folderID;
     private Toolbar toolbar;
-    public com.example.wordscardlibrary.view.Card swipeCardView;
+    public Card swipeCardView;
     public static final String TAG = "TAG";
     public static final String BUNDLE_FOLDER_ID = "folder_id";
     private TextView textError;
@@ -92,65 +92,11 @@ public class ShowCardWithWordsFragment extends AbsFragment {
         mainLayout = (LinearLayout) view.findViewById(R.id.add_folder_layout);
         swipeCardView = (Card) view.findViewById(R.id.card_view);
 
-        setVisibility();
-
-//
-//        swipeCardView.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClicked(int itemPosition, Object dataObject) {
-//                arrayAdapter.onCardClicked();
-//            }
-//        });
-
         arrayAdapter = new CardWithWordsAdapter(getContext(), al);
 
         swipeCardView.setAdapter(arrayAdapter);
-//        swipeCardView.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
-//            @Override
-//            public void removeFirstObjectInAdapter() {
-//                al.remove(0);
-//                //card_progress.setVisibility(View.INVISIBLE);
-//                arrayAdapter.notifyDataSetChanged();
-//
-//            }
-//
-//
-//            @Override
-//            public void onLeftCardExit(Object dataObject) {
-//                //Do something on the left!
-//                //You also have access to the original object.
-//                //If you want to use it just cast it (String) dataObject
-//                arrayAdapter.onDeleteCard();
-//            }
-//
-//            @Override
-//            public void onRightCardExit(Object dataObject) {
-//                arrayAdapter.onDeleteCard();
-//            }
-//
-//            @Override
-//            public void onAdapterAboutToEmpty(int itemsInAdapter) {
-//                Word card = new Word();
-////                card.name = "Card1";
-////                card.imageId = R.drawable.quila2;
-//                al.add(card);
-//                arrayAdapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onScroll(float v) {
-////                arrayAdapter.setVisibility(v);
-////                if  (card_progress.getVisibility()==View.INVISIBLE)
-////                    card_progress.setVisibility(View.VISIBLE);
-////                card_progress.setY(getWindowParams().y*2/3);
-////                if (v>0) onSCrollRight(v);
-////                else
-////                if (v==0) card_progress.setVisibility(View.INVISIBLE);
-////                else
-////                    onScrollLeft(-v); //go from right
-//            }
-//        });
 
+        setVisibility();
 
         return view;
 

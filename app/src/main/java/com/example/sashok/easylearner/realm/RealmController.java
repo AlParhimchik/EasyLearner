@@ -89,7 +89,7 @@ public class RealmController  {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                final RealmResults<Word> results= realm.where(Word.class).contains("id",String.valueOf(word.getID())).findAll();
+                final RealmResults<Word> results= realm.where(Word.class).equalTo("ID",word.getID()).findAll();
                 results.deleteFirstFromRealm();
             }
         });
@@ -211,9 +211,9 @@ public class RealmController  {
        realm.executeTransaction(new Realm.Transaction() {
            @Override
            public void execute(Realm realm) {
-               int size=word.getTranslation().size();
+               int size=word.getTranslations().size();
               for(int i=0;i<size;i++){
-                  word.getTranslation().remove(0);
+                  word.getTranslations().remove(0);
               }
 
            }

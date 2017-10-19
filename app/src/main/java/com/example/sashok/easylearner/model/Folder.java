@@ -1,5 +1,7 @@
 package com.example.sashok.easylearner.model;
 
+import java.io.Serializable;
+
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -8,7 +10,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by sashok on 23.9.17.
  */
 
-public class Folder extends RealmObject {
+public class Folder extends RealmObject  {
     public String getName() {
         return name;
     }

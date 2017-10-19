@@ -1,0 +1,122 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <!--overall style to buttons-->
+    <style name="card_button_theme">
+
+        <item name="android:layout_width">120dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">15dp</item>
+
+    </style>
+    <!--syle to left button-->
+    <style name="card_button_theme.positiv">
+        <item name="android:layout_marginRight">1dp</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:text">@string/positiv_text</item>
+        <item name="android:background">@drawable/btn_positive</item>
+    </style>
+    <!--style to right button-->
+    <style name="card_button_theme.negativ">
+        <item name="android:text">@string/negativ_text</item>
+        <item name="android:layout_marginLeft">1dp</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:background">@drawable/btn_negative</item>
+    </style>
+    <!--parent layout to buttons -->
+    <style name="card_button_relative_layout">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+    <!--parent layout to above relative layout /uses to set weight to card and buttons-->
+    <style name="card_button_linear_layout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+
+    </style>
+
+    <style name="main_textview_layout_theme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="main_textview_theme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">5</item>
+        <item name="android:gravity">center|bottom</item>
+        <item name="android:textSize">36dp</item>
+    </style>
+
+    <style name="trans_example_textview_layout_theme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">4</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="transcrtiption_textview_theme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center|bottom</item>
+    </style>
+
+    <style name="example_textview_theme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">3</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+
+    <style name="help_textview_theme">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">30dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">left|top</item>
+        <item name="android:textSize">20dp</item>
+
+    </style>
+
+    <style name="help_textview_theme.positiv">
+        <item name="android:layout_gravity">left|top</item>
+        <item name="android:background">@drawable/textview_positiv</item>
+        <item name="android:text">@string/positiv_text</item>
+        <item name="android:textColor">@color/positive_color</item>
+
+    </style>
+
+    <style name="help_textview_theme.negativ">
+        <item name="android:text">@string/negativ_text</item>
+        <item name="android:layout_gravity">right|top</item>
+        <item name="android:background">@drawable/text_view_negative</item>
+        <item name="android:textColor">@color/negative_color</item>
+
+    </style>
+</resources>

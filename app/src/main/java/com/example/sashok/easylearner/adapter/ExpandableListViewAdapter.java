@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import io.realm.RealmList;
+
 /**
  * Created by sashok on 25.9.17.
  */
@@ -159,7 +161,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
                         addFolderToFilteredList(folder, word);
                         break;
                     }
-                    for (RealmString string : word.getTranslation()) {
+                    for (RealmString string : (RealmList<RealmString>)word.getTranslations()) {
                         if (string.string_name.contains(charText)) {
                             addFolderToFilteredList(folder, word);
                             break;

@@ -39,6 +39,7 @@ import io.realm.RealmList;
  */
 public class AddWordDialogFragment extends AlertDialog implements View.OnClickListener, View.OnFocusChangeListener {
     EditText en_word;
+    EditText transcription_word;
     ViewGroup.LayoutParams en_word_params;
 
     LinearLayout editText_box;
@@ -129,6 +130,8 @@ public class AddWordDialogFragment extends AlertDialog implements View.OnClickLi
         add_word_view = inflater.inflate(R.layout.add_word_dialog, null);
         setView(add_word_view);
         en_word = (EditText) add_word_view.findViewById(R.id.english_word);
+        transcription_word = (EditText) add_word_view.findViewById(R.id.transcription);
+
         en_word_params = en_word.getLayoutParams();
         add_translate_btn = (RelativeLayout) add_word_view.findViewById(R.id.add_trans_layout);
 
@@ -148,13 +151,15 @@ public class AddWordDialogFragment extends AlertDialog implements View.OnClickLi
     public void initializeWordOnView() {
         isChangesWord = true;
         en_word.setText(word_on_view.getEnWord());
+        transcription_word.setText(word_on_view.getTranscription());
+
         setTitle(word_on_view.getEnWord());
-        for (RealmString translate : word_on_view.getTranslation()
+        for (RealmString translate : (RealmList<RealmString>)word_on_view.getTranslations()
                 ) {
             addTranslationOnView(translate.string_name);
         }
         folder_of_word_on_view = realmController.getFolderById(word_on_view.getFolderID());
-        if (folder_of_word_on_view!=null ) folder_name.setText(folder_of_word_on_view.getName());
+        if (folder_of_word_on_view != null) folder_name.setText(folder_of_word_on_view.getName());
 
 
     }
@@ -221,7 +226,7 @@ public class AddWordDialogFragment extends AlertDialog implements View.OnClickLi
                 realmController.deleteAllWordTranslation(word_on_view);
             }
             realm.beginTransaction();
-            RealmList<RealmString> translations=new RealmList<>();
+            RealmList<RealmString> translations = new RealmList<>();
             for (int i = 0; i < editText_box.getChildCount(); i++) {
                 RelativeLayout layout = (RelativeLayout) editText_box.getChildAt(i);
                 View text = layout.getChildAt(0);
@@ -229,9 +234,12 @@ public class AddWordDialogFragment extends AlertDialog implements View.OnClickLi
                     EditText t = (EditText) text;
                     if (i == 0) {
                         word_on_view.setEnWord(t.getText().toString());
+
+                    } else if (i == 1) {
+                        word_on_view.setTranscription(t.getText().toString());
                     } else {
-                        RealmString realmString=new RealmString();
-                        realmString.string_name=t.getText().toString();
+                        RealmString realmString = new RealmString();
+                        realmString.string_name = t.getText().toString();
                         realm.copyToRealm(realmString);
                         translations.add(realmString);
 
@@ -239,15 +247,12 @@ public class AddWordDialogFragment extends AlertDialog implements View.OnClickLi
 
                 }
             }
-//            realm.copyToRealm(translations);
             word_on_view.setTranslation(translations);
             realm.commitTransaction();
             if (word_on_view.getEnWord() != "") {
                 if (isChangesWord) {
                     realmController.updateWord(word_on_view);
-                    //listener.onWordDeleteFolder();
-                }
-                else realmController.addWord(word_on_view);
+                } else realmController.addWord(word_on_view);
 
                 if (folder_of_word_on_view != null) {
                     word_on_view = realmController.getWordById(word_on_view.getID());
