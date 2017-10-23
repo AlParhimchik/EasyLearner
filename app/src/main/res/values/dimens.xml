@@ -9,4 +9,9 @@
     <dimen name="text_size_normal">13sp</dimen>
     <dimen name="imge_book_detail">80dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="card_margin">5dp</dimen>
+    <dimen name="card_album_radius">0dp</dimen>
+    <dimen name="album_cover_height">160dp</dimen>
+    <dimen name="folder_title_padding">10dp</dimen>
+    <dimen name="album_title">15dp</dimen>
 </resources>

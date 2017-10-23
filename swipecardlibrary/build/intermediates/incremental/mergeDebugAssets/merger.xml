@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/src/main/assets"/><source path="/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/generated/assets/shaders/debug"/></dataSet><dataSet config="debug"><source path="/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/src/debug/assets"/></dataSet></merger>

@@ -18,16 +18,6 @@ import java.util.List;
  * Created by sashok on 17.10.17.
  */
 
-public class WordDataProvider implements DataProvider<Word> {
-    private final Activity activity;
+public abstract class WordDataProvider implements DataProvider<Word> {
 
-    public WordDataProvider(Activity activity) {
-        this.activity = activity;
-    }
-
-    @Override
-    public List<Word> getData() {
-        RealmController controller=RealmController.with(activity);
-        return controller.getWords();
-    }
 }

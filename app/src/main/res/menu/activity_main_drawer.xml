@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="@string/Folders">
-        <menu>
+    <item android:title="@string/Folders"
+        >
+        <menu >
             <item
                 android:id="@+id/unsorted_item"
                 android:icon="@drawable/ic_action_black_folder"
@@ -13,7 +14,8 @@
         </menu>
     </item>
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single"
+        android:id="@+id/single_folders">
 
         <item
             android:id="@+id/add_folder"

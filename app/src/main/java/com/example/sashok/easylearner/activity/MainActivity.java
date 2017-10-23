@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,36 +23,27 @@ import com.example.sashok.easylearner.R;
 import com.example.sashok.easylearner.fragment.AbsFragment;
 import com.example.sashok.easylearner.fragment.AddFolderFragment;
 import com.example.sashok.easylearner.fragment.AddWordDialogFragment;
-import com.example.sashok.easylearner.fragment.ExpandableListFragment;
 import com.example.sashok.easylearner.fragment.SearchInNetFragment;
 import com.example.sashok.easylearner.fragment.ShowCardWithWordsFragment;
+import com.example.sashok.easylearner.listener.DataSetChangeListener;
 import com.example.sashok.easylearner.listener.FolderAddedListener;
-import com.example.sashok.easylearner.listener.WordChangedListener;
 import com.example.sashok.easylearner.model.Folder;
 import com.example.sashok.easylearner.model.FragmentTag;
 import com.example.sashok.easylearner.realm.RealmController;
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.List;
 
 import io.realm.Realm;
 
-public class MainActivity extends AppCompatActivity implements FolderAddedListener, NavigationView.OnNavigationItemSelectedListener, WordChangedListener {
+public class MainActivity extends AbsActivity implements FolderAddedListener, NavigationView.OnNavigationItemSelectedListener, DataSetChangeListener {
     // tags used to attach the fragments
 
     public static FragmentTag CURRENT_TAG;
     //used to retrive from savedinstance when oritration changes
 //    private static String BUNDLE_NAV_ITEM_INDEX = "navItemIndex";
-    private static String BUNDLE_TOOLBAR_TITLE = "toolBarTitle";
+    private static String BUNDLE_ITEM_ID = "BUNDLE_ITEM_ID";
     private static String BUNDLE_CURRENT_TAG = "cur_tag";
-
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle actionBarDrawerToggle;
-    private Toolbar toolbar;
-    private NavigationView navigationView;
-    private TextView toolBarTitle;
     //used when user addes new folder
-    private FolderAddedListener folderAddedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +51,15 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         setContentView(R.layout.activity_main);
         initialize();
         showMostViewsFolders();
-        setSupportActionBar(toolbar);
         setListeners();
+        if (getIntent().getExtras()!=null){
+            int item_id=getIntent().getExtras().getInt("BUNDLE_ITEM_ID",-1);
+            if (item_id!=-1) {
+                selectedItem=navigationView.getMenu().findItem(item_id);
+                onNavigationItemSelected(selectedItem);
+            }
+        }
+        else
         if (savedInstanceState == null) {
             CURRENT_TAG = FragmentTag.TAG_DEFAULT_FRAGMENT;
             replaceFragment(); // if app startes load home fragment
@@ -75,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
                 android.R.anim.slide_out_right);
         fragmentTransaction.replace(R.id.frame_layout, fragment, CURRENT_TAG.getFragmentName());
         fragmentTransaction.commit();
-        drawerLayout.closeDrawers();
+        //drawerLayout.closeDrawers();
     }
 
     public void replaceFragment() {
@@ -90,37 +88,26 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
 
     }
 
-    public void addFragment() {
-
-        Fragment fragment = getFragment();
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
-//                android.R.anim.slide_out_right);
-        fragmentTransaction.add(R.id.frame_layout, fragment, CURRENT_TAG.getFragmentName());
-        fragmentTransaction.commit();
-        drawerLayout.closeDrawers();
-    }
-
     private Fragment getFragment() {
         switch (CURRENT_TAG) {
 
             case TAG_DEFAULT_FRAGMENT:
                 ShowCardWithWordsFragment defaultFragment = new ShowCardWithWordsFragment();
-                toolBarTitle.setText(R.string.app_name);
+                setToolBarTitle(R.string.default_page);
                 return defaultFragment;
             case TAG_SHOW_CARD:
 
                 ShowCardWithWordsFragment cardFragment = new ShowCardWithWordsFragment();
-                toolBarTitle.setText(R.string.app_name);
+                setToolBarTitle(R.string.app_name);
                 return cardFragment;
             case TAG_ADD_FOLDER:
 
                 AddFolderFragment addFolderFragment = new AddFolderFragment();
-                toolBarTitle.setText(R.string.AddFolder);
+                setToolBarTitle(R.string.AddFolder);
                 return addFolderFragment;
             case TAG_SEARCH_INTERNER:
                 SearchInNetFragment searchFragment = new SearchInNetFragment();
-                toolBarTitle.setText(R.string.search_in_net);
+                setToolBarTitle(R.string.search_in_net);
                 return searchFragment;
             default:
                 return new ShowCardWithWordsFragment();
@@ -128,64 +115,22 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
 
     }
 
-    public void initialize() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolBarTitle = (TextView) findViewById(R.id.toolbar_title);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
-                super.onDrawerClosed(drawerView);
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
-                super.onDrawerOpened(drawerView);
-            }
-        };
-    }
-
     public void setListeners() {
-
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        navigationView.setNavigationItemSelectedListener(this);
+        setNavigationItemSelectedListener(this);
     }
 
     public void startFragmentWithFolder(MenuItem item, Folder folder) {
         drawerLayout.closeDrawer(GravityCompat.START);
         item.setChecked(true);
+        selectedItem=item;
         item.setIcon(R.drawable.ic_action_open_folder);
-        toolBarTitle.setText(folder.getName());
+        setToolBarTitle(folder.getName());
         Fragment fragment = ShowCardWithWordsFragment.newInstance(folder.getID());
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,
                 android.R.anim.slide_out_right);
         fragmentTransaction.replace(R.id.frame_layout, fragment, CURRENT_TAG.getFragmentName());
         fragmentTransaction.commit();
-    }
-
-    public void showMostViewsFolders() {
-        RealmController realmController = RealmController.with(MainActivity.this);
-        List<Folder> folders = realmController.getFolders();
-        Menu m = navigationView.getMenu();
-        MenuItem item = m.getItem(0);
-        SubMenu subMenu = item.getSubMenu();
-        subMenu.clear();
-        int count = 0;
-        if (folders != null) {
-            for (Folder folder : folders) {
-                if (count > 3) break;
-                subMenu.add(0, folder.getID(), Menu.NONE, folder.getName()).setIcon(R.drawable.ic_action_black_folder);
-                count++;
-            }
-        }
-        subMenu.add(0, R.id.unsorted_item, Menu.NONE, R.string.unsorted_item_string).setIcon(R.drawable.ic_action_black_folder);
-        subMenu.add(0, R.id.favourite_item, Menu.NONE, R.string.favourite_item_string).setIcon(R.drawable.ic_action_black_folder);
-
     }
 
     @Override
@@ -233,56 +178,7 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
         showMostViewsFolders();
     }
 
-    public void setIconsToDefault() {
-        Menu m = navigationView.getMenu();
-        MenuItem item = m.getItem(0);
-        SubMenu subMenu = item.getSubMenu();
-        for (int i = 0; i < subMenu.size(); i++) {
-            MenuItem menuItem = subMenu.getItem(i);
-            if (menuItem.isChecked()) {
-                menuItem.setChecked(false);
-                menuItem.setIcon(R.drawable.ic_action_black_folder);
-            }
-        }
-        for (int i = 1; i < m.size(); i++) {
-            MenuItem menuItem = m.getItem(i);
-            if (menuItem.isChecked()) menuItem.setChecked(false);
-        }
-    }
-
-    public Folder getSelectedItem() {
-        Menu m = navigationView.getMenu();
-        MenuItem item = m.getItem(0);
-        MenuItem selected_item = null;
-        SubMenu subMenu = item.getSubMenu();
-        Folder folder;
-        for (int i = 0; i < subMenu.size(); i++) {
-            MenuItem menuItem = subMenu.getItem(i);
-            if (menuItem.isChecked()) {
-                selected_item = menuItem;
-
-            }
-        }
-        for (int i = 1; i < m.size(); i++) {
-            MenuItem menuItem = m.getItem(i);
-            if (menuItem.isChecked()) {
-                selected_item = menuItem;
-
-            }
-        }
-        if (selected_item != null) {
-            RealmController controller = RealmController.with(this);
-            folder = controller.getFolderById(selected_item.getItemId());
-            if (folder == null) {
-                folder = new Folder();
-                folder.setName(selected_item.getTitle().toString());
-                folder.setID(selected_item.getItemId());
-            }
-            return folder;
-        } else return null;
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
+     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Folder folder;
@@ -292,8 +188,10 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
                 CURRENT_TAG = FragmentTag.TAG_ADD_FOLDER;
                 break;
             case R.id.vocablurary:
-                Intent intent=new Intent(this,VocabluraryActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(this,VocabluraryActivity.class));
+                break;
+            case  R.id.compilation:
+                startActivity(new Intent(this,CollectionFolderActivity.class));
                 break;
             case R.id.net_search:
                 CURRENT_TAG = FragmentTag.TAG_SEARCH_INTERNER;
@@ -321,34 +219,16 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
                 }
         }
         item.setChecked(true);
-
+        if (item.getItemId()!=R.id.compilation&& item.getItemId()!=R.id.vocablurary)
+        selectedItem=item;
         replaceFragment();
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
-    public void onWordAdded() {
-        onWordDeleteFolder();
-    }
-
-    @Override
-    public void onWordDeleteFolder() {
-        List<Fragment> fragments = getSupportFragmentManager().getFragments();
-        for (Fragment fragment : fragments) {
-            if (fragment instanceof AbsFragment) {
-                ((AbsFragment) fragment).OnDataSetChanged();
-            }
-        }
-    }
-
-    @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        setIconsToDefault();
-        MenuItem item = navigationView.getMenu().findItem(savedInstanceState.getInt("item"));
-        if (item != null) item.setChecked(true);
-        toolBarTitle.setText(savedInstanceState.getString(BUNDLE_TOOLBAR_TITLE));
         CURRENT_TAG = savedInstanceState.getParcelable(BUNDLE_CURRENT_TAG);
 
 
@@ -357,61 +237,37 @@ public class MainActivity extends AppCompatActivity implements FolderAddedListen
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //outState.putInt(BUNDLE_NAV_ITEM_INDEX, navItemIndex);
-        outState.putString(BUNDLE_TOOLBAR_TITLE, toolBarTitle.getText().toString());
         outState.putParcelable(BUNDLE_CURRENT_TAG, CURRENT_TAG);
-        Menu menu = navigationView.getMenu();
-        MenuItem item;
-        int selectedItemId = -1;
-        SubMenu subMenu;
-        for (int i = 0; i < menu.size(); i++) {
-            if (selectedItemId != -1) break;
-            item = menu.getItem(i);
-            if (item.getSubMenu() != null) {
-                subMenu = item.getSubMenu();
-                for (int j = 0; j < subMenu.size(); j++) {
-                    if (subMenu.getItem(j).isChecked()) {
-                        selectedItemId = subMenu.getItem(j).getItemId();
-                    }
-
-                }
-            }
-            if (item.isChecked()) {
-                selectedItemId = item.getItemId();
-
-            }
-
-
-        }
-        outState.putInt("item", selectedItemId);
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-//         Синхронизировать состояние переключения после того, как
-//         возникнет onRestoreInstanceState
-        actionBarDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Передать любые изменения конфигурации переключателям
-        // drawer'а
-        actionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
     protected void onRestart() {
         setIconsToDefault();
-        super.onRestart();
-        onWordDeleteFolder();
+        if (selectedItem!=null) {
+            navigationView.setCheckedItem(selectedItem.getItemId());
+            if (selectedItem.isChecked()==false){
+                selectedItem.setChecked(true);
+
+            }
+            if (selectedItem.getGroupId()==0) selectedItem.setIcon(R.drawable.ic_action_open_folder);
+        }
+         super.onRestart();
+        onDataSetChanged();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Realm.getDefaultInstance().close();
+    }
+
+    @Override
+    public void onDataSetChanged() {
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        for (Fragment fragment : fragments) {
+            if (fragment instanceof AbsFragment) {
+                ((AbsFragment) fragment).onDataSetChanged();
+            }
+        }
     }
 }

@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/androidTest/debug/layout-v21/notification_action.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/layout-v21/notification_action.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/androidTest/debug/layout-v21/notification_action_tombstone.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/layout-v21/notification_action_tombstone.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/androidTest/debug/layout-v21/notification_template_icon_group.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/layout-v21/notification_template_icon_group.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/androidTest/debug/layout-v21/notification_template_custom_big.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/layout-v21/notification_template_custom_big.xml"
+    }
+]

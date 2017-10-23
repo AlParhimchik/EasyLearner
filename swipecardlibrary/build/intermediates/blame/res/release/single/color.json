@@ -1,0 +1,98 @@
+[
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/abc_hint_foreground_material_light.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/color/abc_hint_foreground_material_light.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/abc_tint_switch_track.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/color/abc_tint_switch_track.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/abc_tint_switch_thumb.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/color/abc_tint_switch_thumb.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/design_tint_password_toggle.xml",
+        "source": "/home/sashok/.android/build-cache/69cf0c7b4d73bce423eb6636a6ed7490cae19608/output/res/color/design_tint_password_toggle.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/switch_thumb_material_dark.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/color/switch_thumb_material_dark.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/abc_secondary_text_material_dark.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/color/abc_secondary_text_material_dark.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/abc_primary_text_disable_only_material_light.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/color/abc_primary_text_disable_only_material_light.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/abc_primary_text_material_light.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/color/abc_primary_text_material_light.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/abc_tint_spinner.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/color/abc_tint_spinner.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/abc_btn_colored_text_material.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/color/abc_btn_colored_text_material.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/abc_btn_colored_borderless_text_material.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/color/abc_btn_colored_borderless_text_material.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/abc_primary_text_disable_only_material_dark.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/color/abc_primary_text_disable_only_material_dark.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/abc_primary_text_material_dark.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/color/abc_primary_text_material_dark.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/abc_hint_foreground_material_dark.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/color/abc_hint_foreground_material_dark.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/abc_tint_default.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/color/abc_tint_default.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/abc_tint_edittext.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/color/abc_tint_edittext.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/text_drawable.xml",
+        "source": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/src/main/res/color/text_drawable.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/abc_tint_btn_checkable.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/color/abc_tint_btn_checkable.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/abc_secondary_text_material_light.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/color/abc_secondary_text_material_light.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/design_error.xml",
+        "source": "/home/sashok/.android/build-cache/69cf0c7b4d73bce423eb6636a6ed7490cae19608/output/res/color/design_error.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/colors.xml",
+        "source": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/src/main/res/color/colors.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/switch_thumb_material_light.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/color/switch_thumb_material_light.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/abc_search_url_text.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/color/abc_search_url_text.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/color/abc_tint_seek_thumb.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/color/abc_tint_seek_thumb.xml"
+    }
+]

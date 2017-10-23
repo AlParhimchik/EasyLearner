@@ -42,7 +42,7 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.WordHolder> 
     public WordsAdapter(Activity activity, List<Word> words) {
         this.words = words;
         this.activity = activity;
-        posToAdd = new SparseBooleanArray(words.size());
+        posToAdd = new SparseBooleanArray();
     }
 
     @Override
@@ -75,7 +75,7 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.WordHolder> 
 
     public void onSaveBtnClicked(Folder folder) {
         for (int i = 0; i < posToAdd.size(); i++) {
-            if (posToAdd.get(i)) folder.setWord(words.get(i));
+            if (posToAdd.get(posToAdd.keyAt(i))) folder.setWord(words.get(i));
         }
         RealmController realmController = RealmController.with(activity);
         realmController.addFolder(folder);

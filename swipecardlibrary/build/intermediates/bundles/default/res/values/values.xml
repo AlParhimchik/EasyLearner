@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr format="reference" name="card_button_theme_linear_layout"/>
+    <attr format="reference" name="card_button_theme_negative"/>
+    <attr format="reference" name="card_button_theme_positive"/>
+    <attr format="reference" name="card_button_theme_relative_layout"/>
+    <color name="btn_unchecked_color">@color/white</color>
+    <color name="colorAccent">#921f1f</color>
+    <color name="colorPrimary">#0a8e7f</color>
+    <color name="colorPrimaryDark">#1e645c</color>
+    <color name="endColor">#00a996</color>
+    <color name="full_transparent">#00ffffff</color>
+    <color name="negative_color">#ef5350</color>
+    <color name="positive_color">#388e3c</color>
+    <color name="primaryText">#212121</color>
+    <color name="secondaryText">#757575</color>
+    <color name="startColor">#0d776b</color>
+    <color name="white">#FFFFFF</color>
+    <declare-styleable name="Card"><attr format="integer" name="card_background"/><attr format="reference" name="pos_button_sourse"/><attr format="reference" name="negative_button_sourse"/><attr format="integer" name="primary_color"/><attr format="integer" name="back_color"/></declare-styleable>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="nav_header_height">160dp</dimen>
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <item name="ic_menu_camera" type="drawable">@android:drawable/ic_menu_camera</item>
+    <item name="ic_menu_gallery" type="drawable">@android:drawable/ic_menu_gallery</item>
+    <item name="ic_menu_manage" type="drawable">@android:drawable/ic_menu_manage</item>
+    <item name="ic_menu_send" type="drawable">@android:drawable/ic_menu_send</item>
+    <item name="ic_menu_share" type="drawable">@android:drawable/ic_menu_share</item>
+    <item name="ic_menu_slideshow" type="drawable">@android:drawable/ic_menu_slideshow</item>
+    <string name="add_word">Добавить</string>
+    <string name="animal">Животные</string>
+    <string name="app_name">WordCards</string>
+    <string name="cancel">Отмена</string>
+    <string name="english_word">Введите слово</string>
+    <string name="flowers">Растения</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="negativ_text">не помню</string>
+    <string name="new_topic">Новая тема</string>
+    <string name="positiv_text">помню</string>
+    <string name="russian_word">Введите перевод</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="transcription">Введите траскрипцию</string>
+    <string name="word">Слово</string>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="card_button_linear_layout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+
+    </style>
+    <style name="card_button_relative_layout">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+    <style name="card_button_theme">
+
+        <item name="android:layout_width">120dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">15dp</item>
+
+    </style>
+    <style name="card_button_theme.negativ">
+        <item name="android:text">@string/negativ_text</item>
+        <item name="android:layout_marginLeft">1dp</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:background">@drawable/btn_negative</item>
+    </style>
+    <style name="card_button_theme.positiv">
+        <item name="android:layout_marginRight">1dp</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:text">@string/positiv_text</item>
+        <item name="android:background">@drawable/btn_positive</item>
+    </style>
+    <style name="example_textview_theme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">3</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+    <style name="help_textview_theme">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">30dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">left|top</item>
+        <item name="android:textSize">20dp</item>
+
+    </style>
+    <style name="help_textview_theme.negativ">
+        <item name="android:text">@string/negativ_text</item>
+        <item name="android:layout_gravity">right|top</item>
+        <item name="android:background">@drawable/text_view_negative</item>
+        <item name="android:textColor">@color/negative_color</item>
+
+    </style>
+    <style name="help_textview_theme.positiv">
+        <item name="android:layout_gravity">left|top</item>
+        <item name="android:background">@drawable/textview_positiv</item>
+        <item name="android:text">@string/positiv_text</item>
+        <item name="android:textColor">@color/positive_color</item>
+
+    </style>
+    <style name="main_textview_layout_theme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+    <style name="main_textview_theme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">5</item>
+        <item name="android:gravity">center|bottom</item>
+        <item name="android:textSize">36dp</item>
+    </style>
+    <style name="trans_example_textview_layout_theme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">4</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+    <style name="transcrtiption_textview_theme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center|bottom</item>
+    </style>
+</resources>

@@ -5,5 +5,5 @@ package com.example.sashok.easylearner.listener;
  */
 
 public interface DataSetChangeListener {
-    public  void OnDataSetChanged();
+    public  void onDataSetChanged();
 }

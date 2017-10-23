@@ -23,7 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sashok.easylearner.R;
-import com.example.sashok.easylearner.listener.WordChangedListener;
+import com.example.sashok.easylearner.listener.DataSetChangeListener;
 import com.example.sashok.easylearner.model.Folder;
 import com.example.sashok.easylearner.model.RealmString;
 import com.example.sashok.easylearner.model.Word;
@@ -49,7 +49,7 @@ public class AddWordDialogFragment extends AlertDialog implements View.OnClickLi
     ViewGroup.LayoutParams delete_translate_btn_params;
 
     final Activity activity;
-    WordChangedListener listener;
+    DataSetChangeListener listener;
     Word word_on_view;
     Folder folder_of_word_on_view;
 
@@ -63,7 +63,7 @@ public class AddWordDialogFragment extends AlertDialog implements View.OnClickLi
 
     boolean isChangesWord = false;
 
-    public AddWordDialogFragment(final Activity activity, final WordChangedListener listener, Word word) {
+    public AddWordDialogFragment(final Activity activity, final DataSetChangeListener listener, Word word) {
         super(activity);
         this.activity = activity;
         this.listener = listener;
@@ -105,7 +105,7 @@ public class AddWordDialogFragment extends AlertDialog implements View.OnClickLi
                     public void onClick(DialogInterface dialog, int which) {
                         if (folder_of_word_on_view != null && folder_of_word_on_view != arrayAdapter.getItem(which)) {
                             realmController.deleteWordFromFolder(folder_of_word_on_view, word_on_view);
-                            listener.onWordDeleteFolder();
+                            listener.onDataSetChanged();
                         }
                         folder_of_word_on_view = arrayAdapter.getItem(which);
                         folder_name.setText(folder_of_word_on_view.getName());
@@ -120,7 +120,7 @@ public class AddWordDialogFragment extends AlertDialog implements View.OnClickLi
     }
 
 
-    public AddWordDialogFragment(final Activity activity, WordChangedListener listener) {
+    public AddWordDialogFragment(final Activity activity, DataSetChangeListener listener) {
         this(activity, listener, null);
     }
 
@@ -247,7 +247,7 @@ public class AddWordDialogFragment extends AlertDialog implements View.OnClickLi
 
                 }
             }
-            word_on_view.setTranslation(translations);
+            word_on_view.setTranslations(translations);
             realm.commitTransaction();
             if (word_on_view.getEnWord() != "") {
                 if (isChangesWord) {
@@ -258,7 +258,7 @@ public class AddWordDialogFragment extends AlertDialog implements View.OnClickLi
                     word_on_view = realmController.getWordById(word_on_view.getID());
                     realmController.addWordToFolder(word_on_view, folder_of_word_on_view);
                 }
-                listener.onWordAdded();
+                listener.onDataSetChanged();
                 dismiss();
             } else Toast.makeText(activity, "Добавьте перевод", Toast.LENGTH_LONG).show();
         }

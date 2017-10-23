@@ -27,4 +27,7 @@
     <string name="put_transcription">Транскрипция</string>
     <string name="vocablurary">Словарь</string>
     <string name="compilations">Подборки</string>
+    <string name="Error_no_Words_to_Add">Нету слов для добавления в папку</string>
+    <string name="Error_no_Internet_Connection">Отсутсвует подключение к интернету</string>
+    <string name="default_page">Главная</string>
 </resources>

@@ -1,8 +1,6 @@
 package com.example.sashok.easylearner.adapter;
 
 import android.app.Activity;
-import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,22 +13,27 @@ import android.widget.TextView;
 import com.example.sashok.easylearner.R;
 import com.example.sashok.easylearner.activity.VocabluraryActivity;
 import com.example.sashok.easylearner.data.FolderDataProvider;
+import com.example.sashok.easylearner.data.RealmDBFolderDataProvider;
 import com.example.sashok.easylearner.listener.ActionModeListener;
 import com.example.sashok.easylearner.model.Folder;
+import com.example.sashok.easylearner.model.RealmString;
 import com.example.sashok.easylearner.model.Word;
 import com.example.sashok.easylearner.realm.RealmController;
-import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
+
+import io.realm.RealmList;
 
 /**
  * Created by sashok on 20.10.17.
  */
 
 public class VocabluraryAdapter extends RecyclerView.Adapter implements VocabluraryActivity.ToolbarItemListener {
+    private List<Word> filteredWords;
     private List<Word> mWords;
     private ArrayList<Word> selectedItems;
     private boolean editWords = false;
@@ -47,13 +50,15 @@ public class VocabluraryAdapter extends RecyclerView.Adapter implements Vocablur
     public VocabluraryAdapter(Activity context, List<Word> words) {
         mActionModeListener = ((VocabluraryActivity) context);
         selectedItems = new ArrayList();
-        this.mWords = words;
-        this.context=context;
+        this.filteredWords = words;
+        mWords = new ArrayList<>();
+        mWords.addAll(filteredWords);
+        this.context = context;
         separate_folders = new ArrayList<>();
-        FolderDataProvider provider = new FolderDataProvider(context);
+        FolderDataProvider provider = new RealmDBFolderDataProvider(context);
         folders = provider.getData();
-        mRealmController=RealmController.with(context);
-        untitledWords=new Folder();
+        mRealmController = RealmController.with(context);
+        untitledWords = new Folder();
         untitledWords.setName(context.getResources().getString(R.string.default_folder));
         sortWords();
         notifyDataSetChanged();
@@ -64,17 +69,20 @@ public class VocabluraryAdapter extends RecyclerView.Adapter implements Vocablur
         Folder folder_delete;
         for (Word word :
                 selectedItems) {
-            if (mWords.contains(word)) {
+            if (filteredWords.contains(word)) {
                 if (mSortType == VocabluraryActivity.SortType.SORT_BY_FOLDER) {
                     folder_delete = getFolderById(word.getFolderID());
-                    mRealmController.deleteWordFromFolder(folder_delete,word);
+                    mRealmController.deleteWordFromFolder(folder_delete, word);
                     mRealmController.deleteWord(word);
+//                    if (folder_delete.getWords().size()==0) {
+//                        mRealmController.deleteFolder(folder_delete);
+//                        folders.remove(folder_delete);
+//                    }
+                } else {
+                    getFolderByWord(word).getWords().remove(word);
                 }
-                else {
-                getFolderByWord(word).getWords().remove(word);
-            }
 
-                mWords.remove(word);
+                filteredWords.remove(word);
             }
 
         }
@@ -106,7 +114,6 @@ public class VocabluraryAdapter extends RecyclerView.Adapter implements Vocablur
         notifyDataSetChanged();
     }
 
-
     public OnItemClickListener getItemClickListener() {
         return itemClickListener;
     }
@@ -121,11 +128,10 @@ public class VocabluraryAdapter extends RecyclerView.Adapter implements Vocablur
         return new WordViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
         final WordViewHolder wordViewHolder = (WordViewHolder) viewHolder;
-        final Word word = mWords.get(position);
+        final Word word = filteredWords.get(position);
         wordViewHolder.eng_word.setText(word.getEnWord());
         wordViewHolder.rus_word.setText(word.getTranslation());
         if (editWords) {
@@ -193,7 +199,7 @@ public class VocabluraryAdapter extends RecyclerView.Adapter implements Vocablur
 
     @Override
     public int getItemCount() {
-        return mWords == null ? 0 : mWords.size();
+        return filteredWords == null ? 0 : filteredWords.size();
     }
 
     public static class WordViewHolder extends RecyclerView.ViewHolder {
@@ -220,7 +226,6 @@ public class VocabluraryAdapter extends RecyclerView.Adapter implements Vocablur
         void onItemClicked(int pos);
     }
 
-
     public void sortWords() {
         separate_folders.clear();
         untitledWords.getWords().clear();
@@ -228,7 +233,7 @@ public class VocabluraryAdapter extends RecyclerView.Adapter implements Vocablur
 
         if (mSortType == VocabluraryActivity.SortType.SORT_BY_FOLDER) {
             for (Word word :
-                    mWords) {
+                    filteredWords) {
                 word_folder = getFolderById(word.getFolderID());
                 if (!word_folder.getWords().contains(word))
                     word_folder.getWords().add(word);
@@ -269,10 +274,10 @@ public class VocabluraryAdapter extends RecyclerView.Adapter implements Vocablur
                 }
             });
         }
-        mWords.clear();
+        filteredWords.clear();
         for (Folder folder : separate_folders
                 ) {
-            mWords.addAll(folder.getWords());
+            filteredWords.addAll(folder.getWords());
         }
 
     }
@@ -286,10 +291,36 @@ public class VocabluraryAdapter extends RecyclerView.Adapter implements Vocablur
     }
 
     public Folder getFolderById(int id) {
-        Folder folder= mRealmController.getFolderById(id);
-        if (folder==null) folder=untitledWords;
+        Folder folder = mRealmController.getFolderById(id);
+        if (folder == null) folder = untitledWords;
         return folder;
     }
 
+    public void filter(String charText) {
+        charText = charText.toLowerCase(Locale.getDefault());
+        filteredWords.clear();
+        if (charText.length() == 0) {
+            filteredWords.addAll(mWords);
+        } else {
+            for (Word word : mWords) {
+                if (word.getEnWord().contains(charText) ||
+                        getFolderById(word.getFolderID()).getName().contains(charText) ||
+                        getFolderByWord(word).getName().contains(charText)) {
+                    filteredWords.add(word);
+                    break;
+                }
+
+                for (RealmString string : (RealmList<RealmString>) word.getTranslations()) {
+                    if (string.string_name.contains(charText)) {
+                        filteredWords.add(word);
+                        break;
+                    }
+
+                }
+            }
+
+        }
+        notifyDataSetChanged();
+    }
 
 }

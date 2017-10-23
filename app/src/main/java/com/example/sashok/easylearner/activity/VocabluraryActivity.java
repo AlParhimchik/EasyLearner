@@ -2,8 +2,12 @@ package com.example.sashok.easylearner.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +20,7 @@ import android.widget.TextView;
 import com.example.sashok.easylearner.R;
 import com.example.sashok.easylearner.adapter.VocabluraryAdapter;
 import com.example.sashok.easylearner.data.DataProvider;
+import com.example.sashok.easylearner.data.RealmDBWordDataProvider;
 import com.example.sashok.easylearner.data.WordDataProvider;
 import com.example.sashok.easylearner.listener.ActionModeListener;
 import com.example.sashok.easylearner.model.Word;
@@ -28,9 +33,9 @@ import java.util.List;
  * Created by sashok on 20.10.17.
  */
 
-public class VocabluraryActivity extends AppCompatActivity  implements ActionModeListener {
+public class VocabluraryActivity extends AbsActivity  implements ActionModeListener, NavigationView.OnNavigationItemSelectedListener {
     private DataProvider dataProvider;
-
+    private static final String BUNDLE_ITEM_ID = "BUNDLE_ITEM_ID";
     MaterialSearchView searchView;
     private Toolbar toolbar;
     private TextView toolBarTitle;
@@ -47,18 +52,20 @@ public class VocabluraryActivity extends AppCompatActivity  implements ActionMod
         setContentView(R.layout.vocablurary_activity);
         initialize();
         setListeners();
+        showMostViewsFolders();
     }
 
     public void setListeners() {
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-
+                adapter.filter(query);
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                adapter.filter(newText);
 
                 return true;
             }
@@ -68,18 +75,17 @@ public class VocabluraryActivity extends AppCompatActivity  implements ActionMod
     }
 
     public void initialize() {
+        super.initialize();
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        dataProvider = new WordDataProvider(this);
+        dataProvider = new RealmDBWordDataProvider(this);
         List<Word> words = dataProvider.getData();
         adapter = new VocabluraryAdapter(this, words);
         recyclerView.setAdapter(adapter);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("");
-        toolBarTitle = (TextView) findViewById(R.id.toolbar_title);
-        toolBarTitle.setText(R.string.vocablurary);
+        navigationView.setCheckedItem(R.id.vocablurary);
+        setToolBarTitle(R.string.vocablurary);
+        setNavigationItemSelectedListener(this);
         actionModeCallback = new ActionModeCallback();
         searchView = (MaterialSearchView) findViewById(R.id.search_view);
     }
@@ -153,6 +159,46 @@ public class VocabluraryActivity extends AppCompatActivity  implements ActionMod
 
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.vocablurary:
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                }
+                break;
+            case  R.id.compilation:
+                startActivity(CollectionFolderActivity.class);
+                break;
+            case R.id.add_folder:
+            case R.id.net_search:
+            case R.id.unsorted_item:
+            case R.id.favourite_item:
+
+            default:
+                startActivity(MainActivity.class,Intent.FLAG_ACTIVITY_CLEAR_TOP,createIntBundle(item.getItemId()));
+
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    public void startActivity(Class activity){
+        startActivity(activity,null,null);
+    }
+
+    public void startActivity(Class activity,Integer flags,Bundle args){
+        Intent intent=new Intent(this,activity);
+        if (flags!=null )intent.addFlags(flags);
+        if (args!=null)intent.putExtras(args);
+        startActivity(intent);
+    }
+    public Bundle createIntBundle(int value){
+        Bundle bundle=new Bundle();
+        bundle.putInt(BUNDLE_ITEM_ID,value);
+        return bundle;
+    }
+
     public interface ToolbarItemListener {
         public void onEditItemClicked();
 
@@ -222,6 +268,21 @@ public class VocabluraryActivity extends AppCompatActivity  implements ActionMod
         }
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        MenuItem item=navigationView.getMenu().findItem(R.id.vocablurary);
+        if (item!=null) item.setChecked(true);
     }
 }
 

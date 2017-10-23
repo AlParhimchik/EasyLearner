@@ -202,7 +202,7 @@ public class RealmController  {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.where(Folder.class).contains("id",String.valueOf(folder.getID())).findFirst().deleteFromRealm();
+                realm.where(Folder.class).equalTo("ID",folder.getID()).findFirst().deleteFromRealm();
             }
         });
     }

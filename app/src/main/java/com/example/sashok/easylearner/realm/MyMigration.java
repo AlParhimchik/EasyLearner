@@ -15,9 +15,24 @@ public class MyMigration implements RealmMigration {
     public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
         ///show version and add code
         RealmSchema schema = realm.getSchema();
-        if (oldVersion==0){
-            schema.get("Word").addField("transcription",String.class);
+//        if (oldVersion==0){
+//            schema.get("Word").addField("transcription",String.class);
+//            oldVersion++;
+//        }
+        if (oldVersion==1){
+            if (schema.get("Folder").hasField("folder_url"))
+            schema.get("Folder").removeField("folder_url");
+            if (!schema.get("Folder").hasField("folderURL"))
+            schema.get("Folder").addField("folderURL",String.class);
             oldVersion++;
         }
+
+        if (oldVersion==2){
+            schema.get("Folder").addField("imageURL",String.class);
+            schema.get("Folder").addField("rusName",String.class);
+            oldVersion++;
+        }
+
+
     }
 }

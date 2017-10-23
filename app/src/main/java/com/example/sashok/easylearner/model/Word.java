@@ -84,15 +84,15 @@ public class Word extends RealmObject implements WordInterface {
         return translation;
     }
 
-    public void setTranslation(RealmList<RealmString> translation) {
+    public void setTranslations(RealmList<RealmString> translation) {
         for (RealmString string : translation)
             this.translation.add(string);
     }
 
-    public void setTranslation(RealmString string) {
-        if (translation == null) translation = new RealmList<>();
-
-        if (!this.translation.contains(string)) this.translation.add(string);
+    public void setTranslation(String string) {
+        RealmString string1=new RealmString();
+        string1.string_name=string;
+        if (!this.translation.contains(string1)) this.translation.add(string1);
     }
 
     @Override
@@ -102,7 +102,9 @@ public class Word extends RealmObject implements WordInterface {
 
     @Override
     public String getTranslation() {
+        if (translation.size()>0)
         return translation.get(0).string_name;
+        else return null;
     }
 
     public void setEnWord(String enWord) {
@@ -133,5 +135,6 @@ public class Word extends RealmObject implements WordInterface {
     public void setCountOfShow(int countOfShow) {
         this.countOfShow = countOfShow;
     }
+
 
 }

@@ -9,6 +9,7 @@ public interface CardListener {
     public void onSwipedRight();
     public void onCardClicked();
     public void onFlipAnimEnded();
+    public void onSwipeAnimationEnded();
     public void onDataSetChanged();
     public void onPositiveButtonClicked();
     public void onNegativeButtonClicked();

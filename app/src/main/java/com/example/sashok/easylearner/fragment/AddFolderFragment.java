@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.sashok.easylearner.R;
 import com.example.sashok.easylearner.adapter.WordsAdapter;
+import com.example.sashok.easylearner.data.DataProvider;
 import com.example.sashok.easylearner.helper.DividerItemDecoration;
 import com.example.sashok.easylearner.listener.FolderAddedListener;
 import com.example.sashok.easylearner.model.Folder;
@@ -32,7 +34,7 @@ import java.util.List;
  * Created by sashok on 24.9.17.
  */
 
-public class AddFolderFragment extends Fragment {
+public class AddFolderFragment extends AbsFragment {
     private RecyclerView recyclerView;
     private WordsAdapter mAdapter;
     private TextView btnSave;
@@ -43,7 +45,6 @@ public class AddFolderFragment extends Fragment {
     private List<Word> words;
     private RecyclerView.LayoutManager mLayoutManager;
     private TextView choose_word_textview;
-
     public AddFolderFragment() {
 
     }
@@ -76,10 +77,6 @@ public class AddFolderFragment extends Fragment {
         initComponents(main_view);
         words = RealmController.with(getActivity()).getWordsWithoutFolder();
         showView();
-//        if (words.size()==0) noAvailableAWords();
-//        else{
-        errorText.setVisibility(View.INVISIBLE);
-        mainLayout.setVisibility(View.VISIBLE);
         setRecyclerVIew();
         setListeners();
         return main_view;
@@ -113,7 +110,8 @@ public class AddFolderFragment extends Fragment {
         folderName = (EditText) main_view.findViewById(R.id.folder_name_edit_text);
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         errorText = (TextView) main_view.findViewById(R.id.error_text_no_words);
-        errorText.setText(R.string.Error_no_Words_In_Folder);
+        errorText.setTextColor(ContextCompat.getColor(getContext(),R.color.colorPrimary));
+        errorText.setText(R.string.Error_no_Words_to_Add);
         choose_word_textview = (TextView) main_view.findViewById(R.id.choose_word_textview);
     }
 
@@ -144,5 +142,13 @@ public class AddFolderFragment extends Fragment {
     private void hideKeyBoard(View view) {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @Override
+    public void onDataSetChanged() {
+        words.clear();
+        words.addAll(RealmController.with(getActivity()).getWordsWithoutFolder());
+        showView();
+       mAdapter.notifyDataSetChanged();
     }
 }
