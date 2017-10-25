@@ -24,24 +24,24 @@
         "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/drawable/abc_ratingbar_indicator_material.xml"
     },
     {
-        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/drawable/abc_btn_radio_material.xml",
-        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/drawable/abc_btn_radio_material.xml"
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/drawable/text_drawable.xml",
+        "source": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/src/main/res/drawable/text_drawable.xml"
     },
     {
         "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/drawable/abc_list_selector_background_transition_holo_light.xml",
         "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/drawable/abc_list_selector_background_transition_holo_light.xml"
     },
     {
-        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/drawable/text_drawable.xml",
-        "source": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/src/main/res/drawable/text_drawable.xml"
-    },
-    {
-        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/drawable/abc_dialog_material_background.xml",
-        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/drawable/abc_dialog_material_background.xml"
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/drawable/abc_btn_radio_material.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/drawable/abc_btn_radio_material.xml"
     },
     {
         "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/drawable/navigation_empty_icon.xml",
         "source": "/home/sashok/.android/build-cache/69cf0c7b4d73bce423eb6636a6ed7490cae19608/output/res/drawable/navigation_empty_icon.xml"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/drawable/abc_dialog_material_background.xml",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/drawable/abc_dialog_material_background.xml"
     },
     {
         "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/release/drawable/abc_ratingbar_material.xml",

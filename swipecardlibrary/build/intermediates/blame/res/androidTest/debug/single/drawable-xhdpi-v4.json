@@ -164,12 +164,12 @@
         "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/drawable-xhdpi-v4/notification_bg_low_normal.9.png"
     },
     {
-        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_popup_background_mtrl_mult.9.png",
-        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/drawable-xhdpi-v4/abc_popup_background_mtrl_mult.9.png"
-    },
-    {
         "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png",
         "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/drawable-xhdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png"
+    },
+    {
+        "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_popup_background_mtrl_mult.9.png",
+        "source": "/home/sashok/.android/build-cache/62c77f3d5fb19ed3f664aeb2ab4f8eb9dddba2ce/output/res/drawable-xhdpi-v4/abc_popup_background_mtrl_mult.9.png"
     },
     {
         "merged": "/home/sashok/AndroidStudioProjects/EasyLearner/swipecardlibrary/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/abc_btn_radio_to_on_mtrl_000.png",

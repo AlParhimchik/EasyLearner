@@ -4,6 +4,8 @@
           android:color="#FFFFFF"/>
     <item android:state_selected="true"
           android:color="#FFFFFF"/>
+    <item android:state_activated="true"
+          android:color="#FFFFFF"/>
     <item android:state_focused="true"
           android:color="#FFFFFF"/>
     <item android:color="#000000"/>

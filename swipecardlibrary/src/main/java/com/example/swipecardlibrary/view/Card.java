@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
@@ -40,13 +39,13 @@ public class Card extends CardView implements View.OnTouchListener, CardListener
 
     private final static float RIGHT_DISABLE_COEFFICIENT = 3f / 5;
     private final static float LEFT_DISABLE_COEFFICIENT = 2f / 5;
-    private final static float NOT_MOVE_TIME_VALUE = 100f;
+    private final static float NOT_MOVE_TIME_VALUE = 30f;
     private final static float NOT_MOVE_DISTANCE_VALUE = 1f;
     private SwipeListener mSwipeListener;
     private float xCurrent;
     private float yCurrent;
-    private float xStartCard=-1;
-    private float yStartCard=-1;
+    private float xStartCard = -1;
+    private float yStartCard = -1;
     private Point sizeWindow;
     private AnimatorSet mAnimatorSet;
     private Card cardView;
@@ -106,9 +105,9 @@ public class Card extends CardView implements View.OnTouchListener, CardListener
         positiveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (xStartCard==-1){
-                    xStartCard=cardView.getX();
-                    yStartCard=cardView.getY();
+                if (xStartCard == -1) {
+                    xStartCard = cardView.getX();
+                    yStartCard = cardView.getY();
                 }
                 onPositiveButtonClicked();
             }
@@ -116,14 +115,15 @@ public class Card extends CardView implements View.OnTouchListener, CardListener
         negativeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (xStartCard==-1){
-                    xStartCard=cardView.getX();
-                    yStartCard=cardView.getY();
+                if (xStartCard == -1) {
+                    xStartCard = cardView.getX();
+                    yStartCard = cardView.getY();
                 }
                 onNegativeButtonClicked();
             }
         });
     }
+
 
     private void setupAttrs() {
         if (primaryColor != 0) mainWordTextView.setTextColor(primaryColor);
@@ -344,6 +344,7 @@ public class Card extends CardView implements View.OnTouchListener, CardListener
 
                 break;
             case MotionEvent.ACTION_UP:
+
                 if ((motionEvent.getEventTime() - motionEvent.getDownTime() < NOT_MOVE_TIME_VALUE
                         && motionEvent.getEventTime() - motionEvent.getDownTime() < NOT_MOVE_TIME_VALUE)
                         || (Math.abs(xStartCard - cardView.getX()) < NOT_MOVE_DISTANCE_VALUE &&
@@ -404,13 +405,27 @@ public class Card extends CardView implements View.OnTouchListener, CardListener
         }
         helpNegativeTextView.setVisibility(GONE);
         helpPositivTextView.setVisibility(GONE);
+        setBtnClickable(true);
+        setBtnActivated(false);
         current_word = (WordInterface) adapter.getNextItem();
         if (current_word != null) showWordOnCard(current_word);
     }
 
+    public void setBtnClickable(Boolean clickable) {
+        positiveBtn.setClickable(clickable);
+        negativeBtn.setClickable(clickable);
+    }
+
+    public void setBtnActivated(Boolean activated) {
+        positiveBtn.setActivated(activated);
+        negativeBtn.setActivated(activated);
+
+    }
+
     public void setEnglishWord(WordInterface word) {
         mainWordTextView.setText(word.getEnWord());
-       if (!word.getTranscription().equals("")) transcriptionTextView.setText("[" + word.getTranscription() + "]");
+        if (!word.getTranscription().equals(""))
+            transcriptionTextView.setText("[" + word.getTranscription() + "]");
         else transcriptionTextView.setText("");
         exampleTextView.setText(word.getExample());
     }
@@ -432,6 +447,11 @@ public class Card extends CardView implements View.OnTouchListener, CardListener
         if (mSwipeListener != null) mSwipeListener.onForgetWord(current_word);
         helpNegativeTextView.setVisibility(VISIBLE);
         helpNegativeTextView.setAlpha(1);
+        setBtnClickable(false);
+        if (xStartCard == -1) {
+            xStartCard = cardView.getX();
+            yStartCard = cardView.getY();
+        }
         AnimatorHelper.swipeLeftAnim(cardView, xStartCard, yStartCard, this, sizeWindow.x);
     }
 
@@ -439,6 +459,11 @@ public class Card extends CardView implements View.OnTouchListener, CardListener
     public void onSwipedRight() {
         helpPositivTextView.setVisibility(VISIBLE);
         helpPositivTextView.setAlpha(1);
+        setBtnClickable(false);
+        if (xStartCard == -1) {
+            xStartCard = cardView.getX();
+            yStartCard = cardView.getY();
+        }
         if (mSwipeListener != null) mSwipeListener.onRecognizeWord(current_word);
         AnimatorHelper.swipeRightAnim(cardView, xStartCard, yStartCard, this, sizeWindow.x);
     }
@@ -474,11 +499,14 @@ public class Card extends CardView implements View.OnTouchListener, CardListener
 
     @Override
     public void onPositiveButtonClicked() {
+        positiveBtn.setActivated(true);
         onSwipedRight();
+
     }
 
     @Override
     public void onNegativeButtonClicked() {
+        negativeBtn.setActivated(true);
         onSwipedLeft();
     }
 
